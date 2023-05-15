@@ -5,7 +5,7 @@ const { defineConfig } = require("@vue/cli-service");
 const path = require("path");
 module.exports = defineConfig({
   transpileDependencies: true,
-  publicPath: "/",
+  publicPath: "/myfingertab-ui",
   outputDir: "myfingertab-ui",
   devServer: {
     proxy: {
@@ -23,8 +23,8 @@ module.exports = defineConfig({
   },
   configureWebpack: {
     output: {
-      filename: `js/[name]_${PACKAGE_VERSION}_${Timestamp}.js`,
-      chunkFilename: `js/[name]_${PACKAGE_VERSION}_${Timestamp}.js`,
+      filename: `[name]_${PACKAGE_VERSION}_${Timestamp}.js`,
+      chunkFilename: `[name]_${PACKAGE_VERSION}_${Timestamp}.js`,
     },
   },
   pluginOptions: {},
