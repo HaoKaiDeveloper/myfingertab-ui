@@ -2,7 +2,7 @@
   <form class="basic_info" @submit.prevent="setMemberInfo">
     <div>
       <label>Email</label>
-      <p>03504@fargtory.oceanpark.com.tw</p>
+      <p>{{ basicInfo.email }}</p>
     </div>
     <div>
       <label for="name">姓名</label>
@@ -52,7 +52,7 @@
       />
     </div>
     <div>
-      <label for="birthday">生日</label>
+      <label for="birthday">生日 </label>
       <input
         type="date"
         id="birthday"
@@ -73,6 +73,7 @@ export default {
   props: ["authInfo", "basicInfo"],
   setup(props) {
     const store = useStore();
+
     const info = ref({
       name: "",
       tel: "",
@@ -91,7 +92,6 @@ export default {
         console.log(err);
       }
     }
-
     watch(
       () => props.basicInfo,
       () => {
