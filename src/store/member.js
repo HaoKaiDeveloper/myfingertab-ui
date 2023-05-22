@@ -13,6 +13,7 @@ export default {
     return {
       member: loaclMemberData,
       wishList: [],
+      ReloginState: false,
     };
   },
   getters: {
@@ -35,7 +36,6 @@ export default {
           "https://s.intella.co/myfingertab/api/Member/register",
           payload
         );
-
         return res;
       } catch (err) {
         console.log(err);
@@ -87,7 +87,7 @@ export default {
         console.log(err);
       }
     },
-    async gerMemberInfo(context, payload) {
+    async getMemberInfo(context, payload) {
       const { mbrID, token } = payload;
       try {
         const res = await axios.get(
@@ -106,6 +106,18 @@ export default {
         }
 
         return data;
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    async authCheck(context, payload) {
+      try {
+        const res = await axios.get(
+          `https://s.intella.co/myfingertab/api/Member/getUserbytoken?token=${payload}`
+        );
+        if (Object.keys(res.data).length > 0) {
+          return res.data;
+        }
       } catch (err) {
         console.log(err);
       }
@@ -149,23 +161,21 @@ export default {
             },
           }
         );
-
         if (res.status === 200) {
-          context.state.wishList = res.data;
-          console.log(res);
-          return res.data;
+          context.state.wishList = res.data.SheetInfo;
+          // console.log("getWidhList", res.data);
+          return res.data.SheetInfo;
         }
       } catch (err) {
         console.log(err);
       }
     },
-    async postWishListSheet(context, payload) {
-      // http://localhost/fingertab/api/WishList/{memberId}
-      const { mbrID, token, sheetid } = payload;
+    async toggleFollowStatus(context, payload) {
+      const { mbrID, token, sheets } = payload;
       try {
         const res = await axios.post(
           `https://s.intella.co/myfingertab/api/WishList/${mbrID}`,
-          [sheetid],
+          sheets,
           {
             withCredentials: true,
             headers: {
@@ -173,9 +183,9 @@ export default {
             },
           }
         );
-        console.log(res);
         if (res.status === 200) {
-          return res.data;
+          context.state.wishList = res.data.SheetInfo;
+          return res.data.SheetInfo;
         }
       } catch (err) {
         console.log(err);

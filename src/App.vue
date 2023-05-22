@@ -11,6 +11,7 @@
 import Navbar from "./components/layout/Navbar.vue";
 import SmallNavber from "./components/layout/SmallNavbar.vue";
 import Footer from "./components/layout/Footer.vue";
+import {useStore} from 'vuex'
 export default {
   name: "App",
   components: {
@@ -18,6 +19,9 @@ export default {
     SmallNavber,
     Footer,
   },
+  setup(){
+    const store=useStore()
+  }
 };
 </script>
 

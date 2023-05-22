@@ -37,6 +37,7 @@ import { ref } from "vue";
 import { ImageSwiper, NewsListSwiper } from "../components/homepage/index.js";
 import MusicCard from "../components/UI/MusicCard.vue";
 import MusicDetailPopup from "./MusicDetail.vue";
+import { useRoute, useRouter } from "vue-router";
 export default {
   components: {
     ImageSwiper,
@@ -45,6 +46,8 @@ export default {
     MusicDetailPopup,
   },
   setup() {
+    const route = useRoute();
+    const router = useRouter();
     const store = useStore();
     const swiperImgs = ref([]);
     const newsList = ref([]);
@@ -54,19 +57,51 @@ export default {
 
     init();
     async function init() {
-      const [carousel, allNews, data] = await Promise.all([
-        store.dispatch("getCarouselImgs"),
-        store.dispatch("getAllNews"),
-        store.dispatch("getAllMusic", {
-          pageSize: 6,
-          kind: 3,
-          page: 1,
-          keywords: "",
-        }),
-      ]);
-      swiperImgs.value = carousel;
-      newsList.value = allNews;
-      musicList.value = data.SheetInfo;
+      try {
+        const [carousel, allNews, data] = await Promise.all([
+          store.dispatch("getCarouselImgs"),
+          store.dispatch("getAllNews"),
+          store.dispatch("getAllMusic", {
+            pageSize: 6,
+            kind: 3,
+            page: 1,
+            keywords: "",
+          }),
+        ]);
+        swiperImgs.value = carousel;
+        newsList.value = allNews;
+        musicList.value = data.SheetInfo;
+
+        if (Object.keys(route.query).length > 0) {
+          const queryArr = route.fullPath.split("?");
+          let token = queryArr.find((item) => item.startsWith("token"));
+
+          if (token) {
+            token = token.split("=")[1];
+            const { mbrID, accessToken } = await store.dispatch(
+              "member/authCheck",
+              token
+            );
+            if (mbrID && accessToken) {
+              store.commit("member/setMemberAuthInfo", {
+                mbrID,
+                token: accessToken,
+              });
+              localStorage.setItem(
+                "member",
+                JSON.stringify({
+                  token: accessToken,
+                  mbrID,
+                })
+              );
+            }
+            router.replace("/");
+          }
+        }
+      } catch (err) {
+        router.replace("/");
+        console.log(err);
+      }
     }
 
     async function openMousiDetail(id) {

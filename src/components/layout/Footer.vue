@@ -72,12 +72,13 @@ import pay13 from "../../assets/imgs/pay-13.png";
 export default {
   setup() {
     const aboutItems = [
-      { text: "關於我們", routeParam: "about" },
-      { text: "會員條款", routeParam: "membership" },
-      { text: "買譜說明", routeParam: "buying" },
-      { text: "隱私權政策", routeParam: "privacyPolicy" },
-      { text: "法律資訊", routeParam: "legal" },
-      { text: "Q&A", routeParam: "QA" },
+      { text: "關於我們", routeParam: "aboutMe" },
+      { text: "會員條款", routeParam: "policy" },
+      { text: "買譜說明", routeParam: "des" },
+      { text: "隱私權政策", routeParam: "privatePolicy" },
+      { text: "法律資訊", routeParam: "law" },
+      { text: "Q&A", routeParam: "qa" },
+      { text: "創作者服務條款", routeParam: "terms" },
     ];
     const payicons = {
       pay01,

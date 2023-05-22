@@ -87,8 +87,15 @@ router.beforeEach((to, from, next) => {
   const requiresAuth = to.meta.requiresAuth;
   let mbrID = localStorage.getItem("member");
 
+  console.log(to);
+
   if (requiresAuth && !mbrID) {
     next("/login");
+  } else if (
+    (to.fullPath === "/login" || to.fullPath === "/setPassword") &&
+    mbrID
+  ) {
+    next("/member");
   } else {
     store
       .dispatch("member/getWishList")

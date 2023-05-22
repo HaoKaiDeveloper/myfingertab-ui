@@ -1,6 +1,11 @@
 <template>
   <div class="item">
-    <img :src="item.avatar" alt="img" />
+    <div class="avatar">
+      <img :src="item.avatar" alt="img" v-if="item.avatar" />
+      <span v-else>
+        <v-icon icon="mdi-account" />
+      </span>
+    </div>
     <div class="info">
       <h1>{{ item.sheetName }}</h1>
       <p>創作者 {{ item.creatorname }}</p>
@@ -41,10 +46,24 @@ export default {
     gap: 0.5em;
   }
 
-  img {
+  .avatar {
     width: 100px;
     height: 100px;
-    object-fit: cover;
+    background-color: var(--grey-2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 7px;
+    overflow: hidden;
+    img {
+      width: 100px;
+      height: 100px;
+      object-fit: cover;
+    }
+    span {
+      font-size: 1.5rem;
+      color: var(--grey-4);
+    }
   }
 
   .info {

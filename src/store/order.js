@@ -83,13 +83,10 @@ export default {
             },
           }
         );
-
-        console.log(res);
         const { data } = res;
         if (data.error) {
           return;
         }
-
         return data;
       } catch (err) {
         console.log(err);

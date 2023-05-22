@@ -34,12 +34,17 @@
       </div>
 
       <div class="music_btns">
-        <button type="button" class="cart">
-          立即購買
+        <button type="button" class="cart" @click="addCartItem(data)">
+          加入購物車
           <v-icon icon="mdi-cart" />
         </button>
-        <button type="button" class="like">
-          加入收藏
+        <button
+          type="button"
+          class="like"
+          @click="toggleFollowStatus(data.sheetid)"
+          :class="{ active: followState }"
+        >
+          {{ followState ? "追蹤中" : "加入追蹤" }}
           <v-icon icon="mdi-cards-heart " />
         </button>
       </div>
@@ -48,8 +53,51 @@
 </template>
 
 <script>
+import { useStore } from "vuex";
+import { computed } from "vue";
 export default {
-  props: ["data"],
+  props: ["data", "menubarAuthInfo"],
+  setup(props) {
+    const store = useStore();
+
+    const followState = computed(() => {
+      const item = store.getters["member/wishList"].findIndex(
+        (sheet) => props.data.sheetid === sheet.sheetid
+      );
+      return item < 0 ? false : true;
+    });
+
+    function addCartItem(item) {
+      store.commit("order/addCartItem", item);
+    }
+
+    async function toggleFollowStatus(sheetid) {
+      if (!props.menubarAuthInfo.mbrID) return;
+      const sheets = store.getters["member/wishList"].map(
+        (sheet) => sheet.sheetid
+      );
+      const sheetIndex = sheets.findIndex((id) => id === sheetid);
+      if (sheetIndex < 0) {
+        sheets.push(sheetid);
+      } else if (sheetIndex >= 0) {
+        sheets.splice(sheetIndex, 1);
+      }
+      try {
+        await store.dispatch("member/toggleFollowStatus", {
+          ...props.menubarAuthInfo,
+          sheets,
+        });
+      } catch (err) {
+        console.log(err);
+      }
+    }
+
+    return {
+      addCartItem,
+      toggleFollowStatus,
+      followState,
+    };
+  },
 };
 </script>
 
@@ -147,6 +195,9 @@ export default {
         &:hover {
           background-color: var(--l-orange-1);
         }
+      }
+      .active {
+        color: #e91e63;
       }
     }
   }

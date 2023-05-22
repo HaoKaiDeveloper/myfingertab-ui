@@ -32,7 +32,7 @@ export default {
         `https://s.intella.co/myfingertab/api/Info/sheets/creator?creatorAccount=${id}`
       );
 
-      console.log(res);
+      // console.log(res);
       const { data } = res;
       return data;
     },

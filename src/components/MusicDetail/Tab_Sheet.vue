@@ -11,7 +11,7 @@
         <SheetImgsSwiper :imgs="prevImgs" />
       </div>
 
-      <a :href="data.pdffile" :download="data.sheetName" class="downloandBtn"
+      <a v-if="purchased" class="downloandBtn" @click="downloadSheet(data)"
         >下載檔案</a
       >
     </div>
@@ -21,18 +21,67 @@
 <script>
 import SheetImgsSwiper from "./SheetImgsSwiper.vue";
 import { computed } from "vue";
+import { useStore } from "vuex";
 export default {
   components: { SheetImgsSwiper },
-  props: ["data"],
+  props: ["data", "purchasedSheets"],
   setup(props) {
+    const store = useStore();
     const prevImgs = computed(() => {
       const { preimg1 } = props.data;
+      if (!preimg1) return;
       const arr = preimg1.split(",");
       return arr;
     });
 
+    const purchased = computed(() => {
+      const status = props.purchasedSheets.findIndex(
+        (sheet) => sheet.sheetId === props.data.sheetid
+      );
+      return status < 0 ? false : true;
+    });
+
+    async function downloadSheet(sheet) {
+      try {
+        const data = await store.dispatch("downloadSheet", {
+          ...props.authInfo,
+          sheetid: sheet.sheetid,
+        });
+        if (!data) return;
+        const base64String = data;
+        const byteCharacters = atob(base64String);
+        const byteArrays = [];
+
+        for (let offset = 0; offset < byteCharacters.length; offset += 1024) {
+          const slice = byteCharacters.slice(offset, offset + 1024);
+
+          const byteNumbers = new Array(slice.length);
+          for (let i = 0; i < slice.length; i++) {
+            byteNumbers[i] = slice.charCodeAt(i);
+          }
+
+          const byteArray = new Uint8Array(byteNumbers);
+          byteArrays.push(byteArray);
+        }
+
+        const blob = new Blob(byteArrays, { type: "application/pdf" });
+        const downloadLink = URL.createObjectURL(blob);
+        // 创建下载按钮
+        const button = document.createElement("a");
+        button.href = downloadLink;
+        button.download = `${sheet.sheetName}.pdf`;
+        button.textContent = "Download PDF";
+        button.click();
+        // 将按钮添加到页面中
+      } catch (err) {
+        console.log(err);
+      }
+    }
+
     return {
       prevImgs,
+      purchased,
+      downloadSheet,
     };
   },
 };

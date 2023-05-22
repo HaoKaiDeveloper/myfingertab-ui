@@ -16,9 +16,9 @@
           type="text"
           id="search"
           v-model="searchInput"
-          @keypress.enter="getMusic"
+          @keypress.enter="searchMusicSheet"
         />
-        <v-icon icon="mdi-magnify" class="icon" @click="getMusic" />
+        <v-icon icon="mdi-magnify" class="icon" @click="searchMusicSheet" />
       </label>
     </div>
 
@@ -37,7 +37,7 @@
     />
 
     <div class="pages_box">
-      <div class="pages">
+      <div class="pages" v-if="showPages">
         <button
           type="button"
           v-if="activePage >= 2"
@@ -105,19 +105,18 @@ export default {
     const pagesArr = ref([]);
     const activePagesArr = ref(0);
     const activePage = ref(1);
+    const showPages = ref(true);
 
     getMusic();
-
     async function getMusic() {
       const data = await store.dispatch("getAllMusic", {
         pageSize: pageSize.value,
         kind: musicKind.value,
         page: activePage.value,
-        keywords: searchInput.value,
       });
       allMusic.value = data.SheetInfo;
       totalPages.value = data.totalpage;
-      searchInput.value = "";
+      showPages.value = true;
       let arr = [];
       for (let i = 1; i <= totalPages.value; i++) {
         arr.push(i);
@@ -127,6 +126,18 @@ export default {
         const end = (index + 1) * 5;
         pagesArr.value.push(arr.slice(start, end));
       });
+    }
+
+    async function searchMusicSheet() {
+      if (!searchInput.value.length) {
+        return getMusic();
+      }
+      const data = await store.dispatch("searchMusicSheet", {
+        keyword: searchInput.value,
+      });
+      allMusic.value = data;
+      totalPages.value = 0;
+      showPages.value = false;
     }
 
     async function openMusicDetail(id) {
@@ -170,6 +181,7 @@ export default {
       musicKind,
       searchInput,
       getMusic,
+      searchMusicSheet,
       totalPages,
       active,
       pagesArr,
@@ -179,6 +191,7 @@ export default {
       showMusicDetail,
       openMusicDetail,
       changeActivePage,
+      showPages,
     };
   },
 };

@@ -8,7 +8,7 @@
           <v-icon icon="mdi-close" />
         </button>
 
-        <TopSection :data="data" />
+        <TopSection :data="data" :menubarAuthInfo="menubarAuthInfo" />
 
         <div class="tab_btns">
           <button
@@ -27,22 +27,31 @@
           </button>
         </div>
 
-        <TabSheet :data="data" v-if="activeTab === 'sheet'" />
+        <TabSheet
+          :data="data"
+          :purchasedSheets="purchasedSheets"
+          v-if="activeTab === 'sheet'"
+        />
 
-        <TabTotural :data="data" v-if="activeTab === 'totural'" />
+        <TabTotural
+          :data="data"
+          :purchasedSheets="purchasedSheets"
+          v-if="activeTab === 'totural'"
+        />
       </div>
     </transition>
   </section>
 </template>
 
 <script>
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import {
   SheetImgsSwiper,
   TabSheet,
   TabTotural,
   TopSection,
 } from "../components/MusicDetail/index.js";
+import { useStore } from "vuex";
 export default {
   props: ["data"],
   emits: ["close-music-detail"],
@@ -50,6 +59,11 @@ export default {
   setup(props, context) {
     const activeTab = ref("sheet");
     const chapterOpen = ref(false);
+    const store = useStore();
+    const menubarAuthInfo = computed(() => {
+      return store.getters["member/menubarAuthInfo"];
+    });
+    const purchasedSheets = ref([]);
 
     function changeTabValue(value) {
       activeTab.value = value;
@@ -59,11 +73,23 @@ export default {
       context.emit("close-music-detail");
     }
 
+    getPurchasedSheets();
+    async function getPurchasedSheets() {
+      // const mbInfo=
+      const sheets = await store.dispatch(
+        "order/getPurchasedSheets",
+        menubarAuthInfo.value
+      );
+      purchasedSheets.value = sheets;
+    }
+
     return {
       activeTab,
       chapterOpen,
       closeMusicDetail,
       changeTabValue,
+      menubarAuthInfo,
+      purchasedSheets,
     };
   },
 };

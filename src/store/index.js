@@ -33,17 +33,27 @@ const store = createStore({
       return data;
     },
     async getAllMusic(context, payload) {
-      const { pageSize, kind, page, keywords } = payload;
+      const { pageSize, kind, page } = payload;
 
       let url = `https://s.intella.co/myfingertab/api/Info/sheets?kind=${kind}&page=${page}&pageSize=${pageSize}`;
 
-      if (keywords) {
-        url = url + `&keywords=${keywords}`;
-      }
-
       const res = await axios.get(url);
+      console.log(res);
       const { data } = res;
       return data;
+    },
+    async searchMusicSheet(context, payload) {
+      const { keyword } = payload;
+      try {
+        const res = await axios.get(
+          `https://s.intella.co/myfingertab/api/Info/sheets/search?keyword=${keyword}`
+        );
+        if (res.status === 200) {
+          return res.data;
+        }
+      } catch (err) {
+        console.log(err);
+      }
     },
     async getSingleMusicSheet(context, payload) {
       const { sheetid, userid } = payload;
@@ -59,7 +69,7 @@ const store = createStore({
       const { sheetid, mbrID, token } = payload;
       try {
         const res = await axios.get(
-          `https://s.intella.co/myfingertab/api/Order/pdf?mbrId=${mbrID}&sheetId=0001`,
+          `https://s.intella.co/myfingertab/api/Order/pdf?mbrId=${mbrID}&sheetId=${sheetid}`,
           {
             withCredentials: true,
             headers: {
@@ -75,6 +85,18 @@ const store = createStore({
       } catch (err) {
         console.log(err);
       }
+    },
+    async getAboutInfo(context, payload) {
+      try {
+        const res = await axios.get(
+          "https://s.intella.co/myfingertab/api/Info/about"
+        );
+        if (res.status === 200) {
+          return res.data;
+        } else {
+          throw new Error();
+        }
+      } catch (err) {}
     },
   },
 });

@@ -1,16 +1,7 @@
 <template>
   <div class="music_card">
-    <!-- <iframe
-      :src="`https://www.youtube.com/embed/${music.demourl}`"
-      title="YouTube video player"
-      frameborder="0"
-      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-      allowfullscreen
-      class="music_video"
-    ></iframe> -->
-
     <iframe
-      :src="`https://www.youtube.com/embed/XUFCL-3eEhc`"
+      :src="`https://www.youtube.com/embed/${music.demourl}`"
       title="YouTube video player"
       frameborder="0"
       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
@@ -49,7 +40,7 @@
         <button
           class="follow"
           :class="{ active: followState }"
-          @click="toggleFollowState(music.sheetid)"
+          @click="toggleFollowStatus(music.sheetid)"
         >
           <v-icon icon="mdi-cards-heart" />
         </button>
@@ -70,12 +61,12 @@ export default {
   emits: ["open-music-detail"],
   setup(props, context) {
     const followState = computed(() => {
-      return false;
-      // const item = store.getters["member/wishList"].findIndex(
-      //   (sheetid) => props.music.sheetid === sheetid
-      // );
-      // return item >= 0 ? true : false;
+      const item = store.getters["member/wishList"].findIndex(
+        (sheet) => props.music.sheetid === sheet.sheetid
+      );
+      return item < 0 ? false : true;
     });
+
     const store = useStore();
 
     const menubarAuthInfo = computed(() => {
@@ -85,14 +76,22 @@ export default {
       context.emit("open-music-detail", id);
     }
 
-    async function toggleFollowState(sheetid) {
+    async function toggleFollowStatus(sheetid) {
       if (!menubarAuthInfo.value.mbrID) return;
+      const sheets = store.getters["member/wishList"].map(
+        (sheet) => sheet.sheetid
+      );
+      const sheetIndex = sheets.findIndex((id) => id === sheetid);
+      if (sheetIndex < 0) {
+        sheets.push(sheetid);
+      } else if (sheetIndex >= 0) {
+        sheets.splice(sheetIndex, 1);
+      }
       try {
-        const res = await store.dispatch("member/postWishListSheet", {
+        await store.dispatch("member/toggleFollowStatus", {
           ...menubarAuthInfo.value,
-          sheetid: sheetid,
+          sheets,
         });
-        // followState.value = !followState.value;
       } catch (err) {
         console.log(err);
       }
@@ -104,7 +103,7 @@ export default {
     return {
       followState,
       openMusicDetail,
-      toggleFollowState,
+      toggleFollowStatus,
       addCartItem,
     };
   },
@@ -123,14 +122,25 @@ export default {
     border-radius: 10px;
     padding-bottom: 0.5em;
 
-    @media screen and (max-width: 300px) {
-      /* height: 50em; */
+    @media screen and (max-width: 650px) {
+      height: 50em;
+    }
+
+    @media screen and (max-width: 500px) {
       height: 100%;
     }
   }
   &_video {
     width: 100%;
     height: 45%;
+
+    @media screen and (max-width: 650px) {
+      height: 55%;
+    }
+
+    @media screen and (max-width: 500px) {
+      height: 45%;
+    }
   }
   &_info {
     width: 100%;

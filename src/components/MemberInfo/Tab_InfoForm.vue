@@ -83,7 +83,7 @@ export default {
 
     async function setMemberInfo() {
       try {
-        const res = await store.dispatch("member/setMemberInfo", {
+        await store.dispatch("member/setMemberInfo", {
           info: { ...info.value },
           ...props.authInfo,
         });

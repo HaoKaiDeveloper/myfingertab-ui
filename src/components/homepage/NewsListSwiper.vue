@@ -25,7 +25,7 @@
         </router-link>
         <div class="news_info">
           <p>{{ news.title }}</p>
-          <p>{{ news.startdt }}</p>
+          <p>{{ news.startdt }} - {{ news.enddt }}</p>
           <p>{{ news.des }}</p>
         </div>
       </swiper-slide>
@@ -121,7 +121,7 @@ export default {
 
   &_img {
     width: 100%;
-    height: 60%;
+    height: 100%;
     object-fit: cover;
   }
 }

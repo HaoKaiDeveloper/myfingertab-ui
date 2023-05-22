@@ -38,7 +38,7 @@ export default {
   align-items: center;
   gap: 1em;
   letter-spacing: 1px;
-  font-size: var(--f-s);
+  font-size: var(--f-mi);
   box-shadow: var(--shodow-1);
   padding: 1em 2em;
   border-radius: 7px;
@@ -53,7 +53,7 @@ export default {
   }
   p:nth-child(2) {
     color: var(--grey-3);
-    font-size: var(--f-xs);
+    font-size: var(--f-s);
   }
 
   img {

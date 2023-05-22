@@ -54,15 +54,15 @@ export default {
     function changeTabValue(value) {
       activeTab.value = value;
       if (value === "Tab_InfoForm") {
-        gerMemberInfo();
+        getMemberInfo();
       }
     }
 
-    gerMemberInfo();
-    async function gerMemberInfo() {
+    getMemberInfo();
+    async function getMemberInfo() {
       try {
         const data = await store.dispatch(
-          "member/gerMemberInfo",
+          "member/getMemberInfo",
           menubarAuthInfo.value
         );
         basicInfo.value = data;
