@@ -198,9 +198,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-#sheetMusicPage {
+section {
   padding: 0 5em;
-  min-height: 95vh;
   display: flex;
   flex-direction: column;
   align-items: center;

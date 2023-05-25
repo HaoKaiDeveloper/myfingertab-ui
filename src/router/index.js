@@ -89,7 +89,7 @@ router.beforeEach((to, from, next) => {
 
   console.log(to);
 
-  if (requiresAuth && !mbrID) {
+  if (requiresAuth && !mbrID && to.fullPath !== "/setPassword") {
     next("/login");
   } else if (
     (to.fullPath === "/login" || to.fullPath === "/setPassword") &&

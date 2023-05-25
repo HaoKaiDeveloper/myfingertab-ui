@@ -59,7 +59,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-#wishListPage {
+section {
   padding: 0 5em;
   min-height: 95vh;
   display: flex;

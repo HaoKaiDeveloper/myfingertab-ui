@@ -93,7 +93,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-#cartPage {
+section {
   padding: 0 5em;
   min-height: 95vh;
   display: flex;

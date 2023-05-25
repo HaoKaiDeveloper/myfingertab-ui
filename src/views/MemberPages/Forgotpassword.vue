@@ -105,7 +105,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-#forgotpassword {
+section {
   display: flex;
   flex-direction: column;
   align-items: center;

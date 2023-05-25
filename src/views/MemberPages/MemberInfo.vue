@@ -82,7 +82,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-#memberInfo {
+section {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -98,7 +98,7 @@ export default {
   }
 }
 .tab {
-  width: 100%;
+  width: 90%;
   min-height: 95vh;
   &_btns {
     display: flex;
