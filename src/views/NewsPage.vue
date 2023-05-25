@@ -1,58 +1,113 @@
 <template>
   <section>
-    <h1>最新消息 /</h1>
+    <p class="title">
+      最新消息 / <span @click="toggleShowState">(更多消息)</span>
+    </p>
     <article>
-      <h1>木的Mood指彈吉他音樂會</h1>
-      <p>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Iste
-        perspiciatis distinctio corrupti sequi, ab voluptate id quae odit
-        pariatur a odio eligendi, iure veritatis! Libero vel totam alias cumque
-        assumenda aspernatur eligendi molestias impedit eum autem voluptatibus,
-        quis facere dolorem modi debitis, eveniet aut fuga quibusdam iure ex
-        sapiente cupiditate quas? Assumenda, explicabo incidunt labore
-        voluptatibus ducimus, ratione nobis repudiandae sint temporibus nemo
-        molestiae quibusdam consectetur alias asperiores cum voluptate odit
-        dignissimos velit laboriosam consequatur voluptates distinctio,
-        necessitatibus mollitia! Quibusdam, a! Non fuga laboriosam aut assumenda
-        beatae asperiores consequatur ex saepe alias aliquam fugiat, sequi
-        deserunt tempora dicta soluta voluptatem quis corporis similique ipsam
-        incidunt eius vero! Illo maxime commodi explicabo dignissimos quibusdam
-        perferendis impedit provident optio ipsa. Officiis eos culpa natus
-        quibusdam, nostrum eum. Nobis, eaque blanditiis amet nemo tenetur est,
-        quia magnam accusantium officiis error neque dolore in excepturi fugit
-        doloribus quasi, illo laudantium eligendi? Sunt, maiores iusto?
-      </p>
-      <img
-        src="https://fastly.picsum.photos/id/78/1584/2376.jpg?hmac=80UVSwpa9Nfcq7sQ5kxb9Z5sD2oLsbd5zkFO5ybMC4E"
-        alt="img"
-      />
-      <h2>副標題</h2>
-      <p>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Iste
-        perspiciatis distinctio corrupti sequi, ab voluptate id quae odit
-        pariatur a odio eligendi, iure veritatis! Libero vel totam alias cumque
-        assumenda aspernatur eligendi molestias impedit eum autem voluptatibus,
-        quis facere dolorem modi debitis, eveniet aut fuga quibusdam iure ex
-        sapiente cupiditate quas? Assumenda, explicabo incidunt labore
-      </p>
-      <img
-        src="https://fastly.picsum.photos/id/133/2742/1828.jpg?hmac=0X5o8bHUICkOIvZHtykCRL50Bjn1N8w1AvkenF7n93E"
-        alt="img"
-      />
+      <h1>{{ news.titles }}</h1>
+      <div v-html="news.contents"></div>
+
+      <img :src="news.thumbnail" alt="img" />
+      <img :src="news.content_img" alt="img" />
+
+      <p>發佈日期: {{ news.startdt }}</p>
+      <p>截止日期: {{ news.enddt }}</p>
     </article>
+
+    <div class="backdrop" @click="toggleShowState" v-if="show"></div>
+
+    <transition>
+      <div class="text" v-if="show">
+        <router-link
+          v-for="news in allNews"
+          :key="news.newsid"
+          :to="`/news/${news.newsid}`"
+          @click="toggleShowState"
+        >
+          {{ news.titles }}
+        </router-link>
+      </div>
+    </transition>
   </section>
 </template>
 
 <script>
-export default {};
+import { ref, watch } from "vue";
+import { useStore } from "vuex";
+import { useRoute } from "vue-router";
+export default {
+  setup() {
+    const store = useStore();
+    const route = useRoute();
+    const news = ref("");
+    const allNews = ref([]);
+    const show = ref(false);
+    init();
+    async function init() {
+      const id = route.params.id;
+      const res = await store.dispatch("getAllNews");
+      if (id && res.length > 0) {
+        news.value = res.find((news) => news.newsid === id);
+        console.log(news.value);
+        allNews.value = res;
+        console.log(res);
+      }
+    }
+
+    function toggleShowState() {
+      show.value = !show.value;
+    }
+
+    watch(
+      () => route.params.id,
+      () => {
+        if (route.params.id) {
+          init();
+        }
+      }
+    );
+    return {
+      news,
+      allNews,
+      toggleShowState,
+      show,
+    };
+  },
+};
 </script>
 
 <style scoped lang="scss">
-h1 {
-  font-size: var(--f-l);
-  margin-left: 1em;
+section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2em;
+  padding: 0 5em;
+  min-height: 95vh;
+  margin: 0 auto;
   color: var(--grey-4);
+  position: relative;
+
+  @media screen and (max-width: 1000px) {
+    padding: 0 1em;
+  }
 }
+.title {
+  align-self: flex-start;
+  font-size: var(--f-l);
+  margin-bottom: 0.5em;
+  margin-left: 1.5rem;
+  @media screen and (max-width: 600px) {
+    margin-left: 0rem;
+  }
+  span {
+    font-size: 15px;
+    color: var(--grey-3);
+    cursor: pointer;
+  }
+}
+
 article {
   padding: 2em 5em;
   letter-spacing: 1.5px;
@@ -69,6 +124,10 @@ article {
   h2 {
     margin-top: 1em;
     font-size: var(--f-l);
+  }
+
+  div {
+    font-size: var(--f-mi);
   }
 
   p {
@@ -92,5 +151,57 @@ article {
   @media screen and (max-width: 500px) {
     padding: 2em 1em;
   }
+}
+
+.backdrop {
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.3);
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+
+.text {
+  width: 100%;
+  max-width: 600px;
+  min-width: 250px;
+  padding: 1em;
+  background-color: #fff;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+
+  a {
+    display: block;
+    font-size: var(--f-mi);
+    letter-spacing: 1.5px;
+    margin: 1em 0;
+    border-bottom: 1px dashed var(--grey-3);
+    color: var(--grey-4);
+    font-weight: 500;
+  }
+}
+
+.v-enter-from,
+.v-leave-to {
+  opacity: 0.5;
+  top: 55%;
+}
+
+.v-enter-active {
+  transition: all 0.25s ease-in;
+}
+
+.v-leave-active {
+  transition: all 0.25s ease-out;
+}
+
+.v-enter-to,
+.v-leave-from {
+  opacity: 1;
+  top: 50%;
 }
 </style>

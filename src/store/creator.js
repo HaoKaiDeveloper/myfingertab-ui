@@ -1,5 +1,4 @@
 import axios from "axios";
-import db from "../../db.js";
 
 export default {
   namespaced: true,

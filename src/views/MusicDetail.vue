@@ -29,13 +29,13 @@
 
         <TabSheet
           :data="data"
-          :purchasedSheets="purchasedSheets"
+          :purchasedState="purchasedState"
           v-if="activeTab === 'sheet'"
         />
 
         <TabTotural
           :data="data"
-          :purchasedSheets="purchasedSheets"
+          :purchasedState="purchasedState"
           v-if="activeTab === 'totural'"
         />
       </div>
@@ -63,8 +63,7 @@ export default {
     const menubarAuthInfo = computed(() => {
       return store.getters["member/menubarAuthInfo"];
     });
-    const purchasedSheets = ref([]);
-
+    const purchasedState = ref(false);
     function changeTabValue(value) {
       activeTab.value = value;
     }
@@ -73,14 +72,18 @@ export default {
       context.emit("close-music-detail");
     }
 
-    getPurchasedSheets();
+    if (menubarAuthInfo.mbrID) {
+      getPurchasedSheets();
+    }
     async function getPurchasedSheets() {
-      // const mbInfo=
       const sheets = await store.dispatch(
         "order/getPurchasedSheets",
         menubarAuthInfo.value
       );
-      purchasedSheets.value = sheets;
+      const status = sheets.findIndex(
+        (sheet) => sheet.sheetId === props.data.sheetid
+      );
+      purchasedState.value = status < 0 ? false : true;
     }
 
     return {
@@ -89,7 +92,7 @@ export default {
       closeMusicDetail,
       changeTabValue,
       menubarAuthInfo,
-      purchasedSheets,
+      purchasedState,
     };
   },
 };

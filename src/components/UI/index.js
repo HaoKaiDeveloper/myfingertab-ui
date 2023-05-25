@@ -1,7 +1,3 @@
-import MusicCard from './MusicCard.vue';
+import MusicCard from "./MusicCard.vue";
 
-
-
-export {
-    MusicCard,
-}
+export { MusicCard };

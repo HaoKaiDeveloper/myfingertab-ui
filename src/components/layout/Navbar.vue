@@ -1,5 +1,5 @@
 <template>
-  <section id="navbar">
+  <section id="navbar" :class="navScroll">
     <router-link to="/">
       <img :src="logo" alt="logo" class="logo" />
     </router-link>
@@ -33,8 +33,6 @@
         <v-icon icon="mdi-cart" />
       </button>
     </router-link>
-
-    <div class="line"></div>
   </section>
 </template>
 
@@ -49,6 +47,7 @@ export default {
     const store = useStore();
     const route = useRoute();
     const router = useRouter();
+    const navScroll = ref("");
 
     const cartLength = computed(() => {
       return store.getters["order/cartLength"];
@@ -66,11 +65,20 @@ export default {
       }
     }
 
+    window.addEventListener("scroll", () => {
+      if (window.scrollY > 0) {
+        navScroll.value = "scroll";
+      } else {
+        navScroll.value = "";
+      }
+    });
+
     return {
       cartLength,
       checkMemberLogin,
       logo,
       menubarAuthInfo,
+      navScroll,
     };
   },
 };
@@ -80,25 +88,34 @@ export default {
 #navbar {
   width: 100%;
   max-width: 2000px;
+  height: 80px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 1rem;
+  gap: 0.5rem;
   font-size: calc(1rem + 0.2vw);
-  position: relative;
-  margin: 0 auto 2em auto;
+  background-color: #fff;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 2;
+  padding: 0 1em;
   color: var(--grey-4);
 
-  @media screen and (max-width: 870px) {
+  @media screen and (max-width: 860px) {
     display: none;
   }
+
+  &.scroll {
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
+  }
 }
+
 nav {
   display: flex;
   align-items: center;
   flex-grow: 1;
   gap: 0.5em;
-
   a {
     padding: 0.2rem 1rem;
     color: var(--d-purple-1);
@@ -137,15 +154,5 @@ nav {
 }
 .logo {
   width: 180px;
-}
-
-.line {
-  width: 90%;
-  height: 1px;
-  background-color: var(--grey-5);
-  position: absolute;
-  bottom: -0.5em;
-  left: 50%;
-  transform: translateX(-50%);
 }
 </style>

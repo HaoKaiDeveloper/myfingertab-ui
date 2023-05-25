@@ -1,27 +1,33 @@
 <template>
   <div class="layout">
     <Navbar />
-    <SmallNavber />
+    <SmallNavbar />
     <router-view class="views"></router-view>
+    <AddItemMsg />
     <Footer />
   </div>
 </template>
 
 <script>
-import Navbar from "./components/layout/Navbar.vue";
-import SmallNavber from "./components/layout/SmallNavbar.vue";
-import Footer from "./components/layout/Footer.vue";
-import {useStore} from 'vuex'
+import {
+  Footer,
+  Navbar,
+  SmallNavbar,
+  AddItemMsg,
+} from "./components/layout/index.js";
+
+import { useStore } from "vuex";
 export default {
   name: "App",
   components: {
     Navbar,
-    SmallNavber,
+    SmallNavbar,
     Footer,
+    AddItemMsg,
   },
-  setup(){
-    const store=useStore()
-  }
+  setup() {
+    const store = useStore();
+  },
 };
 </script>
 
@@ -74,6 +80,10 @@ body {
     width: 100%;
     max-width: 2000px;
     min-height: 95vh;
+    margin-top: 80px;
+    @media screen and (max-width: 860px) {
+      margin-top: 0px;
+    }
   }
 }
 

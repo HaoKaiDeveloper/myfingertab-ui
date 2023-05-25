@@ -13,16 +13,9 @@
 import { ref, computed } from "vue";
 import { useStore } from "vuex";
 export default {
-  props: ["data", "purchasedSheets"],
+  props: ["data", "purchasedState"],
   setup(props) {
     const store = useStore();
-    const purchased = computed(() => {
-      const status = props.purchasedSheets.findIndex(
-        (sheet) => sheet.sheetId === props.data.sheetid
-      );
-      return status < 0 ? false : true;
-    });
-    return { purchased };
   },
 };
 </script>

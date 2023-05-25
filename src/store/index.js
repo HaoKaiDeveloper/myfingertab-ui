@@ -1,6 +1,5 @@
 import { createStore } from "vuex";
 import axios from "axios";
-import db from "../../db.js";
 import creatorModule from "./creator.js";
 import memberModule from "./member.js";
 import orderModule from "./order.js";

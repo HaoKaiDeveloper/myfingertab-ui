@@ -1,6 +1,6 @@
 <template>
   <section id="loginPage">
-    <main v-if="!registerStatus">
+    <main>
       <h1>{{ title }}</h1>
       <form @submit.prevent="memberAuth">
         <label for="name" v-if="!isMember">
@@ -17,6 +17,7 @@
         </label>
 
         <p v-if="errMsg" class="err_msg">{{ errMsg }}</p>
+
         <button type="submit" class="submit_btn" v-else>
           {{ isMember ? "登入" : "註冊" }}
         </button>
@@ -32,10 +33,14 @@
         <router-link to="/setPassword" v-if="isMember">忘記密碼</router-link>
       </div>
     </main>
-    <main v-else>
-      <img :src="logo" alt="logo" />
-      <p class="regi_msg">註冊成功，請至信箱查看確認信</p>
-    </main>
+
+    <div class="registerPop" v-if="registerStatus">
+      <div class="backdrop" @click="registerStatus = !registerStatus"></div>
+      <div class="text">
+        <img :src="logo" alt="logo" />
+        <p class="regi_msg">註冊成功，請至信箱查看確認信</p>
+      </div>
+    </div>
   </section>
 </template>
 
@@ -79,7 +84,8 @@ export default {
           password: password.value,
           userId: name.value,
         });
-        if (!res) {
+        if (!res || res.data === "該信箱已經註冊過，請更換信箱") {
+          errMsg.value = "該信箱已經註冊過";
           return (registerStatus.value = false);
         }
         registerStatus.value = true;
@@ -180,6 +186,45 @@ export default {
     width: 100%;
   }
 }
+.registerPop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .backdrop {
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.2);
+    position: fixed;
+    top: 0;
+    left: 0;
+  }
+
+  .text {
+    width: 100%;
+    min-width: 250px;
+    max-width: 360px;
+    height: 180px;
+    background-color: #fff;
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    font-size: var(--f-mi);
+    img {
+      display: block;
+      width: 200px;
+      object-fit: cover;
+      margin: 1em auto;
+      margin-bottom: 2em;
+    }
+  }
+}
 
 main {
   width: 100%;
@@ -246,13 +291,6 @@ main {
       border-bottom: 0.7px solid blue;
       font-size: var(--f-s);
     }
-  }
-
-  img {
-    display: block;
-    width: 200px;
-    object-fit: cover;
-    margin: 1em auto;
   }
 
   .err_msg {

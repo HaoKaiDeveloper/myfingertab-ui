@@ -83,9 +83,13 @@ export default {
             },
           }
         );
+
+        // data:{
+        //   error: '使用非法Token或Token已過期，請重新登入'
+        // }
         const { data } = res;
         if (data.error) {
-          return;
+          throw new Error("");
         }
         return data;
       } catch (err) {

@@ -41,6 +41,7 @@
           class="follow"
           :class="{ active: followState }"
           @click="toggleFollowStatus(music.sheetid)"
+          v-if="menubarAuthInfo.mbrID"
         >
           <v-icon icon="mdi-cards-heart" />
         </button>
@@ -54,7 +55,7 @@
 </template>
 
 <script>
-import { computed, ref } from "vue";
+import { computed } from "vue";
 import { useStore } from "vuex";
 export default {
   props: ["music"],
@@ -78,15 +79,19 @@ export default {
 
     async function toggleFollowStatus(sheetid) {
       if (!menubarAuthInfo.value.mbrID) return;
+
       const sheets = store.getters["member/wishList"].map(
         (sheet) => sheet.sheetid
       );
+
       const sheetIndex = sheets.findIndex((id) => id === sheetid);
+
       if (sheetIndex < 0) {
         sheets.push(sheetid);
       } else if (sheetIndex >= 0) {
         sheets.splice(sheetIndex, 1);
       }
+
       try {
         await store.dispatch("member/toggleFollowStatus", {
           ...menubarAuthInfo.value,
@@ -105,6 +110,7 @@ export default {
       openMusicDetail,
       toggleFollowStatus,
       addCartItem,
+      menubarAuthInfo,
     };
   },
 };

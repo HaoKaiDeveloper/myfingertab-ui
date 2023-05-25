@@ -161,9 +161,8 @@ export default {
             },
           }
         );
-        if (res.status === 200) {
+        if (res.status === 200 && res.data.SheetInfo) {
           context.state.wishList = res.data.SheetInfo;
-          // console.log("getWidhList", res.data);
           return res.data.SheetInfo;
         }
       } catch (err) {
@@ -183,7 +182,7 @@ export default {
             },
           }
         );
-        if (res.status === 200) {
+        if (res.status === 200 && res.data.SheetInfo) {
           context.state.wishList = res.data.SheetInfo;
           return res.data.SheetInfo;
         }

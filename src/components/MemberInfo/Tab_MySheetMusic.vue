@@ -26,7 +26,7 @@
 <script>
 import { useStore } from "vuex";
 import { ref } from "vue";
-import axios from "axios";
+
 export default {
   props: ["authInfo"],
   setup(props) {
@@ -35,14 +35,14 @@ export default {
 
     getPurchasedSheets();
     async function getPurchasedSheets() {
-      const data = await store.dispatch(
-        "order/getPurchasedSheets",
-        props.authInfo
-      );
-
-      if (data) {
-        sheets.value = data;
-      }
+      console.log("getpurchased");
+      // const data = await store.dispatch(
+      //   "order/getPurchasedSheets",
+      //   props.authInfo
+      // );
+      // if (data) {
+      //   sheets.value = data;
+      // }
     }
 
     async function downloadSheet(sheet) {
