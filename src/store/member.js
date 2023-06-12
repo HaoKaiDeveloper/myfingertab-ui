@@ -12,8 +12,9 @@ export default {
   state() {
     return {
       member: loaclMemberData,
+      memberName: "",
       wishList: [],
-      ReloginState: false,
+      reloginState: false,
     };
   },
   getters: {
@@ -23,10 +24,26 @@ export default {
     wishList(state) {
       return state.wishList;
     },
+    memberName(state) {
+      return state.memberName;
+    },
   },
   mutations: {
     setMemberAuthInfo(state, payload) {
       state.member = payload;
+    },
+    logout(state) {
+      state.member = {
+        mbrID: "",
+        token: "",
+      };
+      state.wishList = [];
+      state.reloginState = false;
+      state.memberName = "";
+      localStorage.removeItem("member");
+    },
+    setMemberName(state, payload) {
+      state.memberName = payload;
     },
   },
   actions: {

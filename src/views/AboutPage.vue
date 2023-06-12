@@ -206,11 +206,15 @@ article {
     font-size: var(--f-mi);
     text-align: left;
     margin: 1em 0;
+    white-space: normal;
   }
   .imgs {
     img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
       display: block;
-      margin: 1em;
+      margin: 0;
     }
   }
 }

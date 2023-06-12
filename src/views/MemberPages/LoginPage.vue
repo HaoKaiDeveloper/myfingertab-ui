@@ -29,7 +29,9 @@
       <hr />
 
       <div class="btns">
-        <button type="button" @click="googleLogin">Google</button>
+        <button type="button" @click="oauth('google')">Google</button>
+        <button type="button" @click="oauth('facebook')">Facebook</button>
+
         <router-link to="/setPassword" v-if="isMember">忘記密碼</router-link>
       </div>
     </main>
@@ -133,9 +135,14 @@ export default {
       register();
     }
 
-    function googleLogin() {
-      window.location.href =
-        "https://s.intella.co/myfingertab/oauth2/authorization/google";
+    function oauth(id) {
+      if (id === "google") {
+        window.location.href =
+          "https://s.intella.co/myfingertab/oauth2/authorization/google";
+      } else if (id === "facebook") {
+        window.location.href =
+          "https://s.intella.co/myfingertab/oauth2/authorization/facebook";
+      }
     }
 
     function toggleIsMember() {
@@ -164,7 +171,7 @@ export default {
       errMsg,
       toggleIsMember,
       registerStatus,
-      googleLogin,
+      oauth,
     };
   },
 };

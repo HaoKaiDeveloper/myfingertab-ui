@@ -38,6 +38,7 @@ import { ImageSwiper, NewsListSwiper } from "../components/homepage/index.js";
 import MusicCard from "../components/UI/MusicCard.vue";
 import MusicDetailPopup from "./MusicDetail.vue";
 import { useRoute, useRouter } from "vue-router";
+import { all } from "axios";
 export default {
   components: {
     ImageSwiper,
@@ -146,17 +147,22 @@ section {
 
 .swiper_box {
   width: 100%;
+  height: 100%;
+  @media screen and (max-width: 700px) {
+    height: 150px;
+  }
 }
 
 .title {
   text-align: center;
   font-size: var(--f-xl);
-  margin-bottom: 0.5em;
+  margin-bottom: 1.5em;
 }
 
 .news {
   width: 100%;
   margin-bottom: calc(5em + 1vw);
+  margin-top: 2rem;
 }
 
 .popMusic {

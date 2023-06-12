@@ -130,6 +130,9 @@ h3 {
 .logo {
   width: 180px;
   object-fit: cover;
+  @media screen and (max-width: 400px) {
+    width: 100%;
+  }
 }
 
 a,

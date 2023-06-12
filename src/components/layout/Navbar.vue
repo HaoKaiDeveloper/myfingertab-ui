@@ -25,8 +25,13 @@
         <v-icon icon="mdi-cards-heart" />
       </button>
     </router-link>
-    <button class="member iconBtn" @click="checkMemberLogin">
+    <button
+      class="member iconBtn"
+      :class="{ active: memberName }"
+      @click="checkMemberLogin"
+    >
       <v-icon icon="mdi-account" />
+      <p>{{ memberName }}</p>
     </button>
     <router-link to="/mycart">
       <button class="cart iconBtn" :cartItems="cartLength">
@@ -52,8 +57,13 @@ export default {
     const cartLength = computed(() => {
       return store.getters["order/cartLength"];
     });
+
     const menubarAuthInfo = computed(() => {
       return store.getters["member/menubarAuthInfo"];
+    });
+
+    const memberName = computed(() => {
+      return store.getters["member/memberName"];
     });
 
     async function checkMemberLogin() {
@@ -78,6 +88,7 @@ export default {
       checkMemberLogin,
       logo,
       menubarAuthInfo,
+      memberName,
       navScroll,
     };
   },
@@ -134,6 +145,17 @@ nav {
 
 .iconBtn {
   color: var(--grey-4);
+  position: relative;
+}
+.member {
+  p {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: var(--f-s);
+    width: 100%;
+    white-space: nowrap;
+  }
 }
 .cart {
   position: relative;

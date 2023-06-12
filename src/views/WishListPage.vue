@@ -20,7 +20,7 @@
 
 <script>
 import { useStore } from "vuex";
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import MusicCard from "../components/UI/MusicCard.vue";
 import MusicDetailPopup from "./MusicDetail.vue";
 
@@ -28,7 +28,9 @@ export default {
   components: { MusicDetailPopup, MusicCard },
   setup() {
     const store = useStore();
-    const wishList = ref([]);
+    const wishList = computed(() => {
+      return store.getters["member/wishList"];
+    });
     const musicDetail = ref({});
     const showMusicDetail = ref(false);
 
@@ -45,8 +47,6 @@ export default {
       musicDetail.value = res;
       showMusicDetail.value = true;
     }
-
-    wishList.value = store.getters["member/wishList"];
 
     return {
       wishList,

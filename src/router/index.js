@@ -87,7 +87,14 @@ router.beforeEach((to, from, next) => {
   const requiresAuth = to.meta.requiresAuth;
   let mbrID = localStorage.getItem("member");
 
-  console.log(to);
+  if (mbrID) {
+    store
+      .dispatch("member/getMemberInfo", JSON.parse(mbrID))
+      .then((res) => {
+        store.commit("member/setMemberName", res.name);
+      })
+      .catch((err) => console.log(err));
+  }
 
   if (requiresAuth && !mbrID && to.fullPath !== "/setPassword") {
     next("/login");

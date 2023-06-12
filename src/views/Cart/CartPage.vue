@@ -60,7 +60,7 @@ export default {
           ...menubarAuthInfo.value,
           cartItems: cartItems.value,
         });
-        console.log(res);
+
         if (res.status === 200) {
           const url = res.data;
 
@@ -102,7 +102,6 @@ section {
   gap: 2em;
   margin: 0 auto;
   color: var(--grey-4);
-  position: relative;
 
   @media screen and (max-width: 1000px) {
     padding: 0 1em;

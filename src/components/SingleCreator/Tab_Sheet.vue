@@ -36,9 +36,9 @@ export default {
       }
       const res = await store.dispatch("getSingleMusicSheet", {
         sheetid: id,
-        userid: "userid-1",
       });
 
+      console.log(res);
       musicDetail.value = res;
       showMusicDetail.value = true;
     }
@@ -61,7 +61,7 @@ export default {
   display: grid;
   grid-template-columns: repeat(3, minmax(20em, 30em));
   gap: 2em;
-  justify-content: start;
+  justify-content: center;
   margin-bottom: 3em;
 
   @media screen and (max-width: 820px) {

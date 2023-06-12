@@ -6,16 +6,12 @@
     <article>
       <h1>{{ news.titles }}</h1>
       <div v-html="news.contents"></div>
-
-      <img :src="news.thumbnail" alt="img" />
       <img :src="news.content_img" alt="img" />
-
       <p>發佈日期: {{ news.startdt }}</p>
       <p>截止日期: {{ news.enddt }}</p>
     </article>
 
     <div class="backdrop" @click="toggleShowState" v-if="show"></div>
-
     <transition>
       <div class="text" v-if="show">
         <router-link
@@ -50,7 +46,6 @@ export default {
         news.value = res.find((news) => news.newsid === id);
         console.log(news.value);
         allNews.value = res;
-        console.log(res);
       }
     }
 
@@ -139,9 +134,7 @@ article {
 
   img {
     width: 100%;
-    max-width: 50em;
     height: 100%;
-    max-height: 50em;
     object-fit: cover;
   }
 
@@ -160,6 +153,7 @@ article {
   position: fixed;
   top: 0;
   left: 0;
+  z-index: 10;
 }
 
 .text {
@@ -172,7 +166,7 @@ article {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  z-index: 1;
+  z-index: 10;
 
   a {
     display: block;

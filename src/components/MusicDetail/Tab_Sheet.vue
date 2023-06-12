@@ -8,7 +8,7 @@
 
     <div class="info">
       <div class="sheet_swiper">
-        <SheetImgsSwiper :imgs="prevImgs" />
+        <SheetImgsSwiper :imgs="prevImgs" v-if="prevImgs" />
       </div>
 
       <a v-if="purchasedState" class="downloandBtn" @click="downloadSheet(data)"
@@ -33,6 +33,7 @@ export default {
       const arr = preimg1.split(",");
       return arr;
     });
+    console.log(props.data);
 
     async function downloadSheet(sheet) {
       try {

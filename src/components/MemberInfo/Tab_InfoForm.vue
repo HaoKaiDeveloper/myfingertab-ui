@@ -60,19 +60,24 @@
         v-model="info.birth"
       />
     </div>
+    <p class="msg">{{ msg }}</p>
     <button type="submit">
       儲存會員資料 <v-icon icon="mdi-arrow-right" class="i" />
     </button>
+    <button type="button" @click="logout">登出</button>
   </form>
 </template>
 
 <script>
 import { ref, watch } from "vue";
 import { useStore } from "vuex";
+import { useRouter } from "vue-router";
 export default {
   props: ["authInfo", "basicInfo"],
   setup(props) {
     const store = useStore();
+    const msg = ref("");
+    const router = useRouter();
 
     const info = ref({
       name: "",
@@ -88,10 +93,28 @@ export default {
           info: { ...info.value },
           ...props.authInfo,
         });
+        msg.value = "資料更新完成";
       } catch (err) {
         console.log(err);
       }
     }
+
+    function logout() {
+      store.commit("member/logout");
+      router.push("/");
+    }
+
+    watch(
+      () => msg.value,
+      () => {
+        if (msg.value) {
+          setTimeout(() => {
+            msg.value = "";
+          }, 2000);
+        }
+      }
+    );
+
     watch(
       () => props.basicInfo,
       () => {
@@ -102,6 +125,8 @@ export default {
     return {
       info,
       setMemberInfo,
+      msg,
+      logout,
     };
   },
 };
@@ -115,11 +140,17 @@ export default {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 1.5em;
+  gap: 1em;
   margin: 0 auto;
   padding: 0 0.7em;
   font-size: calc(0.9rem + 0.2vw);
   word-break: break-all;
+
+  .msg {
+    font-size: var(--f-mi);
+    height: 2rem;
+    color: var(--d-purple-1);
+  }
   div {
     width: 100%;
     display: flex;
@@ -150,15 +181,15 @@ export default {
   }
   button {
     font-size: var(--f-mi);
-    padding: 0.46em 2.7em;
-    border-radius: 20px;
+    padding: 0.4em 2em;
+    border-radius: 7px;
     color: var(--grey-4);
-    border: 1px solid var(--d-purple-1);
     letter-spacing: 1.5px;
+    background-color: var(--grey-2);
     &:hover,
     &:active {
-      background-color: var(--d-purple-1);
       color: var(--grey-1);
+      background-color: var(--d-purple-1);
     }
   }
 
@@ -177,7 +208,7 @@ export default {
       }
     }
     button {
-      margin: 2em 0;
+      margin: 1em 0;
     }
   }
 }

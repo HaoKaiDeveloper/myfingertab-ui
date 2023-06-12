@@ -35,7 +35,6 @@ const store = createStore({
       const { pageSize, kind, page } = payload;
 
       let url = `https://s.intella.co/myfingertab/api/Info/sheets?kind=${kind}&page=${page}&pageSize=${pageSize}`;
-
       const res = await axios.get(url);
       console.log(res);
       const { data } = res;
@@ -55,7 +54,7 @@ const store = createStore({
       }
     },
     async getSingleMusicSheet(context, payload) {
-      const { sheetid, userid } = payload;
+      const { sheetid } = payload;
       let url = `https://s.intella.co/myfingertab/api/Info/sheets/${sheetid}`;
       const res = await axios.get(url);
 

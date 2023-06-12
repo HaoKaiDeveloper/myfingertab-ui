@@ -13,6 +13,7 @@
         pauseOnMounseEnter: true,
       }"
       :modules="modules"
+      :loop="true"
       class="mySwiper"
     >
       <swiper-slide
@@ -20,12 +21,12 @@
         :key="news.newsid"
         class="news_card"
       >
+        <p class="titles">{{ news.titles }}</p>
         <router-link :to="`/news/${news.newsid}`">
           <img :src="news.thumbnail" alt="newsImg" class="news_img" />
         </router-link>
         <div class="news_info">
-          <p>{{ news.title }}</p>
-          <p>{{ news.startdt }} - {{ news.enddt }}</p>
+          <!-- <p>{{ news.startdt }} - {{ news.enddt }}</p> -->
           <p>{{ news.des }}</p>
         </div>
       </swiper-slide>
@@ -56,7 +57,7 @@ export default {
     SwiperSlide,
   },
   props: ["allNews"],
-  setup() {
+  setup(props) {
     const slidesPerViewNum = ref(3);
 
     if (window.innerWidth < 700) {
@@ -95,28 +96,20 @@ export default {
 }
 
 .news {
+  letter-spacing: 1.5px;
+
   &_card {
     width: 100%;
     overflow: hidden;
   }
 
+  .titles {
+    font-size: 20px;
+    font-weight: 500;
+  }
   &_info {
-    width: 90%;
-    margin: 0 auto;
-    p:nth-child(1) {
-      font-size: var(--f-mi);
-      font-weight: 600;
-    }
-    p:nth-child(2) {
-      font-size: var(--f-s);
-      color: var(--grey-3);
-    }
-    p:nth-child(3) {
-      font-size: var(--f-s);
-      color: var(--grey-4);
-      letter-spacing: 1px;
-      text-align: left;
-    }
+    font-size: var(--f-mi);
+    word-wrap: break-word;
   }
 
   &_img {
@@ -129,7 +122,7 @@ export default {
 .prev_btn,
 .next_btn {
   position: absolute;
-  top: 40%;
+  top: 30%;
   transform: translateY(-50%);
   width: 2em;
   height: 2em;

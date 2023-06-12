@@ -54,7 +54,9 @@ export default {
           "order/getPurchaseHistory",
           props.authInfo
         );
-        ordersHistory.value = res;
+        ordersHistory.value = res.filter((order, i) => {
+          return order.status !== "0";
+        });
       } catch (err) {
         console.log(err);
       }

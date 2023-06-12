@@ -51,14 +51,14 @@ section {
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 99;
+  z-index: 10;
 }
 div {
   width: 100%;
-  max-width: 400px;
+  max-width: 350px;
   min-width: 250px;
   height: 80%;
-  max-height: 400px;
+  max-height: 350px;
   background-color: var(--grey-1);
   display: flex;
   flex-direction: column;

@@ -1,7 +1,7 @@
 <template>
   <div class="music_card">
     <iframe
-      :src="`https://www.youtube.com/embed/${music.demourl}`"
+      :src="music.demourl"
       title="YouTube video player"
       frameborder="0"
       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"

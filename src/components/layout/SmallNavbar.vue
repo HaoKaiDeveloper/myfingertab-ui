@@ -39,7 +39,8 @@
           <button><v-icon icon="mdi-cards-heart " />追蹤清單</button>
         </router-link>
         <button class="member" @click="checkMemberLogin">
-          <v-icon icon="mdi-account" /> 會員專區
+          <v-icon icon="mdi-account" />
+          {{ memberName ? `Hi ${memberName}` : "會員專區" }}
         </button>
         <router-link to="/mycart" @click="toggleNavbar">
           <button class="cart">
@@ -67,6 +68,10 @@ export default {
 
     const menubarAuthInfo = computed(() => {
       return store.getters["member/menubarAuthInfo"];
+    });
+
+    const memberName = computed(() => {
+      return store.getters["member/memberName"];
     });
 
     window.addEventListener("scroll", () => {
@@ -148,6 +153,7 @@ export default {
       navShadow,
       cartLength,
       menubarAuthInfo,
+      memberName,
     };
   },
 };
@@ -253,7 +259,7 @@ export default {
   }
   .info {
     width: 30vw;
-    min-width: 20em;
+    min-width: 220px;
     height: 100%;
     position: fixed;
     top: 0;

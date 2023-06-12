@@ -72,7 +72,7 @@ export default {
       const data = await store.dispatch("creator/getSingleCreatorAllMusic", {
         id: createId,
       });
-
+      console.log(data);
       creatorSheetMusic.value = data;
     }
 
