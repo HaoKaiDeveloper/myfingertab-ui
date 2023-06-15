@@ -16,7 +16,8 @@
         <td>
           $<span>{{ order.amount }}</span>
         </td>
-        <td>{{ order.status }}</td>
+        <td v-if="order.status === '1'">付款成功</td>
+        <td v-else-if="order.status === '2'">作廢</td>
         <td>
           <button type="button" @click="getOrderDetail(order.transNo)">
             查看
@@ -54,6 +55,7 @@ export default {
           "order/getPurchaseHistory",
           props.authInfo
         );
+        console.log(ordersHistory.value);
         ordersHistory.value = res.filter((order, i) => {
           return order.status !== "0";
         });

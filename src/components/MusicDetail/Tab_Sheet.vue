@@ -11,7 +11,10 @@
         <SheetImgsSwiper :imgs="prevImgs" v-if="prevImgs" />
       </div>
 
-      <a v-if="purchasedState" class="downloandBtn" @click="downloadSheet(data)"
+      <a
+        v-if="purchasedState || data.saleprice === 0"
+        class="downloandBtn"
+        @click="downloadSheet(data)"
         >下載檔案</a
       >
     </div>
@@ -33,7 +36,6 @@ export default {
       const arr = preimg1.split(",");
       return arr;
     });
-    console.log(props.data);
 
     async function downloadSheet(sheet) {
       try {

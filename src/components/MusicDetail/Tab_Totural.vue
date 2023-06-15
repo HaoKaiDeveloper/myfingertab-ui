@@ -3,8 +3,7 @@
     <p class="title">{{ data.sheetName }}</p>
 
     <!-- v-if="purchasedState" -->
-    <div class="info">
-      <!-- 可能為圖片或影片 -->
+    <div class="info" v-if="purchasedState || data.saleprice === 0">
       <div class="content">
         <iframe
           :src="activeTotural.url"

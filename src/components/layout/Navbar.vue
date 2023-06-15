@@ -145,9 +145,9 @@ nav {
 
 .iconBtn {
   color: var(--grey-4);
-  position: relative;
 }
 .member {
+  position: relative;
   p {
     position: absolute;
     left: 50%;

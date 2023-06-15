@@ -127,11 +127,27 @@ export default {
         console.log(err);
       }
     },
-    async authCheck(context, payload) {
+    async googleAuthCheck(context, payload) {
+      console.log("googleCheck", payload);
       try {
         const res = await axios.get(
           `https://s.intella.co/myfingertab/api/Member/getUserbytoken?token=${payload}`
         );
+        console.log(res);
+        if (Object.keys(res.data).length > 0) {
+          return res.data;
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    async facebookAuthCheck(context, payload) {
+      console.log("facebookChack", payload);
+      try {
+        const res = await axios.get(
+          `https://s.intella.co/myfingertab/api/Member/getFaceBookUserbytoken?token=${payload}`
+        );
+        console.log(res);
         if (Object.keys(res.data).length > 0) {
           return res.data;
         }
@@ -141,6 +157,7 @@ export default {
     },
     async setMemberInfo(context, payload) {
       const { mbrID, token, info } = payload;
+      console.log(info);
       try {
         const res = await axios.put(
           `https://s.intella.co/myfingertab/api/Member/attributes/${mbrID}`,
@@ -153,6 +170,7 @@ export default {
           }
         );
         const { data } = res;
+        console.log(res);
         if (data.error) {
           return;
         }

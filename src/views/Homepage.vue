@@ -74,15 +74,18 @@ export default {
         musicList.value = data.SheetInfo;
 
         if (Object.keys(route.query).length > 0) {
-          const queryArr = route.fullPath.split("?");
-          let token = queryArr.find((item) => item.startsWith("token"));
+          const token = route.fullPath.split("code=")[1].split("&")[0];
+          const type = route.fullPath.split("type=")[1].split("&")[0];
+          if (token && (type === "facebook" || type === "google")) {
+            const autuPath =
+              type === "facebook" ? "facebookAuthCheck" : "googleAuthCheck";
 
-          if (token) {
-            token = token.split("=")[1];
+            console.log(type, token);
             const { mbrID, accessToken } = await store.dispatch(
-              "member/authCheck",
+              `member/${autuPath}`,
               token
             );
+
             if (mbrID && accessToken) {
               store.commit("member/setMemberAuthInfo", {
                 mbrID,
@@ -95,12 +98,13 @@ export default {
                   mbrID,
                 })
               );
+              router.replace({ path: "/" });
             }
-            router.replace("/");
           }
         }
       } catch (err) {
-        router.replace("/");
+        router.replace({ path: "/" });
+
         console.log(err);
       }
     }

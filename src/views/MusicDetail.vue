@@ -64,6 +64,7 @@ export default {
       return store.getters["member/menubarAuthInfo"];
     });
     const purchasedState = ref(false);
+
     function changeTabValue(value) {
       activeTab.value = value;
     }
@@ -75,6 +76,7 @@ export default {
     if (menubarAuthInfo.mbrID) {
       getPurchasedSheets();
     }
+
     async function getPurchasedSheets() {
       const sheets = await store.dispatch(
         "order/getPurchasedSheets",

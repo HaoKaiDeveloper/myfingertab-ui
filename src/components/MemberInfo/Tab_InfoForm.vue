@@ -93,6 +93,7 @@ export default {
           info: { ...info.value },
           ...props.authInfo,
         });
+        store.commit("member/setMemberName", info.value.name);
         msg.value = "資料更新完成";
       } catch (err) {
         console.log(err);
