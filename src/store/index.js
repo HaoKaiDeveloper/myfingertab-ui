@@ -64,10 +64,10 @@ const store = createStore({
       return data;
     },
     async downloadSheet(context, payload) {
-      const { sheetid, mbrID, token } = payload;
+      const { sheetId, mbrID, token } = payload;
       try {
         const res = await axios.get(
-          `https://s.intella.co/myfingertab/api/Order/pdf?mbrId=${mbrID}&sheetId=${sheetid}`,
+          `https://s.intella.co/myfingertab/api/Order/pdf?mbrId=${mbrID}&sheetId=${sheetId}`,
           {
             withCredentials: true,
             headers: {

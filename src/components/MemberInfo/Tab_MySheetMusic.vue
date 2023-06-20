@@ -48,7 +48,7 @@ export default {
       try {
         const data = await store.dispatch("downloadSheet", {
           ...props.authInfo,
-          sheetid: sheet.sheetid,
+          sheetId: sheet.sheetId,
         });
         const base64String = data;
         const byteCharacters = atob(base64String);
