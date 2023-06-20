@@ -69,9 +69,16 @@ export default {
             keywords: "",
           }),
         ]);
+
         swiperImgs.value = carousel;
         newsList.value = allNews;
         musicList.value = data.SheetInfo;
+
+        if (window.innerWidth <= 700) {
+          swiperImgs.value = carousel.map((data) => {
+            return { ...data, img: data.smallimg };
+          });
+        }
 
         if (Object.keys(route.query).length > 0) {
           const token = route.fullPath.split("code=")[1].split("&")[0];
@@ -104,11 +111,9 @@ export default {
         }
       } catch (err) {
         router.replace({ path: "/" });
-
         console.log(err);
       }
     }
-
     async function openMousiDetail(id) {
       if (!id) {
         showMusicDetail.value = false;

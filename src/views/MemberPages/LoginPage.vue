@@ -28,10 +28,14 @@
 
       <hr />
 
+      <p class="suggestion">
+        建議使用Google
+        Chrome瀏覽器登入。使用快速登入無法修改收件email信箱。請確認能收到信件email再進行購物較佳。
+      </p>
+
       <div class="btns">
         <button type="button" @click="oauth('google')">Google</button>
         <button type="button" @click="oauth('facebook')">Facebook</button>
-
         <router-link to="/setPassword" v-if="isMember">忘記密碼</router-link>
       </div>
     </main>
@@ -246,6 +250,14 @@ main {
     width: 80%;
     margin: 0 auto;
     border: 0.5px dashed var(--grey-3);
+  }
+
+  .suggestion {
+    margin: 0.5em;
+    width: 80%;
+    margin: 0.5em auto;
+    text-align: center;
+    font-size: var(--f-mi);
   }
 
   h1 {

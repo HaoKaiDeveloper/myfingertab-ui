@@ -35,14 +35,13 @@ export default {
 
     getPurchasedSheets();
     async function getPurchasedSheets() {
-      console.log("getpurchased");
-      // const data = await store.dispatch(
-      //   "order/getPurchasedSheets",
-      //   props.authInfo
-      // );
-      // if (data) {
-      //   sheets.value = data;
-      // }
+      const data = await store.dispatch(
+        "order/getPurchasedSheets",
+        props.authInfo
+      );
+      if (data) {
+        sheets.value = data;
+      }
     }
 
     async function downloadSheet(sheet) {

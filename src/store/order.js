@@ -73,6 +73,7 @@ export default {
     },
     async getPurchasedSheets(state, payload) {
       const { mbrID, token } = payload;
+
       try {
         const res = await axios.get(
           `https://s.intella.co/myfingertab/api/Order/purchased-sheets?mbrId=${mbrID}`,
@@ -83,7 +84,6 @@ export default {
             },
           }
         );
-
         // data:{
         //   error: '使用非法Token或Token已過期，請重新登入'
         // }

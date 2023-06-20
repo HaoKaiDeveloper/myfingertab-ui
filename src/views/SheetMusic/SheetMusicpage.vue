@@ -114,9 +114,16 @@ export default {
         kind: musicKind.value,
         page: activePage.value,
       });
-      allMusic.value = data.SheetInfo;
+      if (window.innerWidth <= 550) {
+        //手機板載入更多
+        allMusic.value = [...allMusic.value, ...data.SheetInfo];
+      } else {
+        //電腦版換頁
+        allMusic.value = data.SheetInfo;
+      }
       totalPages.value = data.totalpage;
       showPages.value = true;
+
       let arr = [];
       for (let i = 1; i <= totalPages.value; i++) {
         arr.push(i);

@@ -66,6 +66,7 @@ export default {
         route.params
       );
       creator.value = data;
+      console.log(creator.value);
     }
 
     async function getCreatorAllMusic(createId) {

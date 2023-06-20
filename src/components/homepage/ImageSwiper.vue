@@ -37,15 +37,13 @@ import "swiper/css/pagination";
 import "swiper/css/navigation";
 // import required modules
 import { Pagination, Navigation, Autoplay } from "swiper";
-import { ref } from "vue";
-
 export default {
   components: {
     Swiper,
     SwiperSlide,
   },
   props: ["imgs"],
-  setup() {
+  setup(props) {
     return {
       modules: [Pagination, Navigation, Autoplay],
     };
