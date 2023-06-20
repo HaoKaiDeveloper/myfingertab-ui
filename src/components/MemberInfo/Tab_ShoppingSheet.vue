@@ -11,7 +11,7 @@
       </tr>
 
       <tr v-for="order in ordersHistory" :key="order.transNo">
-        <td>{{ order.orderDate }}</td>
+        <td>{{ order.orderDate.split(".")[0] }}</td>
         <td>{{ order.transNo }}</td>
         <td>
           $<span>{{ order.amount }}</span>
@@ -55,7 +55,7 @@ export default {
           "order/getPurchaseHistory",
           props.authInfo
         );
-        console.log(ordersHistory.value);
+
         ordersHistory.value = res.filter((order, i) => {
           return order.status !== "0";
         });

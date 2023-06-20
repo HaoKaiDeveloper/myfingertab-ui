@@ -55,7 +55,6 @@ export default {
     const musicList = ref([]);
     const showMusicDetail = ref(false);
     const musicDetail = ref({});
-
     init();
     async function init() {
       try {
