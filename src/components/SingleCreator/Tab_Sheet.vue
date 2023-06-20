@@ -8,7 +8,12 @@
         @open-music-detail="openMusicDetail"
       />
     </div>
-    <MusicDetail :data="musicDetail" @close-music-detail="openMusicDetail" />
+    <MusicDetail
+      v-if="showMusicDetail"
+      :show="showMusicDetail"
+      :data="musicDetail"
+      @close-music-detail="openMusicDetail"
+    />
   </article>
 </template>
 

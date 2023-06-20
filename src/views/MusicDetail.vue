@@ -44,7 +44,7 @@
 </template>
 
 <script>
-import { ref, computed } from "vue";
+import { ref, computed, watch } from "vue";
 import {
   SheetImgsSwiper,
   TabSheet,
@@ -60,6 +60,17 @@ export default {
     const activeTab = ref("sheet");
     const chapterOpen = ref(false);
     const store = useStore();
+    const purchasedSheets = ref([]);
+
+    // localStorage.setItem(
+    //   "member",
+    //   JSON.stringify({
+    //     mbrID: "fe99bf13-8781-4793-b5ec-af89b4ec050f",
+    //     token:
+    //       "eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6Imhhb2thaUBpbnRlbGxhLmNvIiwibWVtYmVySWQiOiJmZTk5YmYxMy04NzgxLTQ3OTMtYjVlYy1hZjg5YjRlYzA1MGYiLCJleHAiOjE2ODczMzQyMzQsImlzcyI6ImZpbmdlcnRhYkFkbWluIn0.bD0Sy8Qo1a4DoYRp2RDVq_LuduMKm0nHvpgiiKbCGI0",
+    //   })
+    // );
+
     const menubarAuthInfo = computed(() => {
       return store.getters["member/menubarAuthInfo"];
     });
@@ -73,7 +84,14 @@ export default {
       context.emit("close-music-detail");
     }
 
-    if (menubarAuthInfo.mbrID) {
+    function checkPurchasedState(id) {
+      const status = purchasedSheets.value.findIndex(
+        (sheet) => sheet.sheetId === id
+      );
+      purchasedState.value = status < 0 ? false : true;
+    }
+
+    if (menubarAuthInfo.value.mbrID) {
       getPurchasedSheets();
     }
 
@@ -82,11 +100,17 @@ export default {
         "order/getPurchasedSheets",
         menubarAuthInfo.value
       );
-      const status = sheets.findIndex(
-        (sheet) => sheet.sheetId === props.data.sheetid
-      );
-      purchasedState.value = status < 0 ? false : true;
+      purchasedSheets.value = sheets;
     }
+
+    watch(
+      () => props.data,
+      () => {
+        if (props.data.sheetid && menubarAuthInfo.value.mbrID) {
+          checkPurchasedState(props.data.sheetid);
+        }
+      }
+    );
 
     return {
       activeTab,

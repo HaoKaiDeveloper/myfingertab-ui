@@ -32,7 +32,9 @@
     </div>
 
     <MusicDetailPopup
+      v-if="showMusicDetail"
       :data="musicDetail"
+      :show="showMusicDetail"
       @close-music-detail="openMusicDetail"
     />
 
