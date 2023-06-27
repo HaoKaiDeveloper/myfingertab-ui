@@ -7,12 +7,12 @@
     <p />
 
     <div class="info">
-      <div class="sheet_swiper">
-        <SheetImgsSwiper :imgs="prevImgs" v-if="prevImgs" />
+      <div class="sheet_swiper" v-if="prevImgs">
+        <SheetImgsSwiper :imgs="prevImgs" />
       </div>
 
       <a
-        v-if="purchasedState || data.saleprice === 0"
+        v-if="purchasedState || (authInfo.token && data.saleprice === 0)"
         class="downloandBtn"
         @click="downloadSheet(data)"
         >下載檔案</a
@@ -27,7 +27,7 @@ import { computed } from "vue";
 import { useStore } from "vuex";
 export default {
   components: { SheetImgsSwiper },
-  props: ["data", "purchasedState"],
+  props: ["data", "purchasedState", "authInfo"],
   setup(props) {
     const store = useStore();
     const prevImgs = computed(() => {
@@ -36,12 +36,11 @@ export default {
       const arr = preimg1.split(",");
       return arr;
     });
-
     async function downloadSheet(sheet) {
       try {
         const data = await store.dispatch("downloadSheet", {
           ...props.authInfo,
-          sheetid: sheet.sheetid,
+          sheetId: sheet.sheetid,
         });
         if (!data) return;
         const base64String = data;

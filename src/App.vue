@@ -5,6 +5,7 @@
     <router-view class="views"></router-view>
     <AddItemMsg />
     <Footer />
+    <!-- <TokenExpired v-if="tokenExpiredState" /> -->
   </div>
 </template>
 
@@ -14,9 +15,11 @@ import {
   Navbar,
   SmallNavbar,
   AddItemMsg,
+  TokenExpired,
 } from "./components/layout/index.js";
 
 import { useStore } from "vuex";
+import { computed } from "vue";
 export default {
   name: "App",
   components: {
@@ -24,9 +27,27 @@ export default {
     SmallNavbar,
     Footer,
     AddItemMsg,
+    TokenExpired,
   },
   setup() {
     const store = useStore();
+
+    const tokenExpiredState = computed(() => {
+      return store.getters["member/tokenExpired"];
+    });
+
+    // localStorage.setItem(
+    //   "member",
+    //   JSON.stringify({
+    //     mbrID: "fe99bf13-8781-4793-b5ec-af89b4ec050f",
+    //     token:
+    //       "eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6Imhhb2thaUBpbnRlbGxhLmNvIiwibWVtYmVySWQiOiJmZTk5YmYxMy04NzgxLTQ3OTMtYjVlYy1hZjg5YjRlYzA1MGYiLCJleHAiOjE2ODc5MjIxMTAsImlzcyI6ImZpbmdlcnRhYkFkbWluIn0.kqeN32TdiITjIK0EUfuunAOrjG1CFB_VmthdI5tzwAQ",
+    //   })
+    // );
+
+    return {
+      tokenExpiredState,
+    };
   },
 };
 </script>

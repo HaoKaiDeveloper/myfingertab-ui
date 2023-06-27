@@ -1,5 +1,5 @@
 import { createStore } from "vuex";
-import axios from "axios";
+import { authFetch, basicFetch } from "../api/api";
 import creatorModule from "./creator.js";
 import memberModule from "./member.js";
 import orderModule from "./order.js";
@@ -17,25 +17,21 @@ const store = createStore({
   getters: {},
   actions: {
     async getCarouselImgs() {
-      const res = await axios.get(
-        "https://s.intella.co/myfingertab/api/Info/carousel"
-      );
+      const res = await basicFetch.get("/Info/carousel");
       const { data } = res;
       return data;
     },
 
     async getAllNews() {
-      const res = await axios.get(
-        "https://s.intella.co/myfingertab/api/Info/news"
-      );
+      const res = await basicFetch.get("/Info/news");
       const { data } = res;
       return data;
     },
     async getAllMusic(context, payload) {
       const { pageSize, kind, page } = payload;
 
-      let url = `https://s.intella.co/myfingertab/api/Info/sheets?kind=${kind}&page=${page}&pageSize=${pageSize}`;
-      const res = await axios.get(url);
+      let url = `/Info/sheets?kind=${kind}&page=${page}&pageSize=${pageSize}`;
+      const res = await basicFetch.get(url);
       console.log(res);
       const { data } = res;
       return data;
@@ -43,8 +39,8 @@ const store = createStore({
     async searchMusicSheet(context, payload) {
       const { keyword } = payload;
       try {
-        const res = await axios.get(
-          `https://s.intella.co/myfingertab/api/Info/sheets/search?keyword=${keyword}`
+        const res = await basicFetch.get(
+          `/Info/sheets/search?keyword=${keyword}`
         );
         if (res.status === 200) {
           return res.data;
@@ -55,21 +51,16 @@ const store = createStore({
     },
     async getSingleMusicSheet(context, payload) {
       const { sheetid } = payload;
-      let url = `https://s.intella.co/myfingertab/api/Info/sheets/${sheetid}`;
-      const res = await axios.get(url);
-
-      console.log(res);
-
+      const res = await basicFetch.get(`/Info/sheets/${sheetid}`);
       const { data } = res;
       return data;
     },
     async downloadSheet(context, payload) {
       const { sheetId, mbrID, token } = payload;
       try {
-        const res = await axios.get(
-          `https://s.intella.co/myfingertab/api/Order/pdf?mbrId=${mbrID}&sheetId=${sheetId}`,
+        const res = await authFetch.get(
+          `/Order/pdf?mbrId=${mbrID}&sheetid=${sheetId}`,
           {
-            withCredentials: true,
             headers: {
               Authorization: `Bearer ${token}`,
             },
@@ -86,15 +77,15 @@ const store = createStore({
     },
     async getAboutInfo(context, payload) {
       try {
-        const res = await axios.get(
-          "https://s.intella.co/myfingertab/api/Info/about"
-        );
+        const res = await basicFetch.get("/Info/about");
         if (res.status === 200) {
           return res.data;
         } else {
           throw new Error();
         }
-      } catch (err) {}
+      } catch (err) {
+        console.log(err);
+      }
     },
   },
 });

@@ -2,19 +2,21 @@
   <article class="totural_section">
     <p class="title">{{ data.sheetName }}</p>
 
-    <!-- v-if="purchasedState" -->
     <div class="info" v-if="purchasedState || data.saleprice === 0">
-      <div class="content">
+      <div class="content" v-if="activeTotural.url || activeTotural.des">
         <iframe
           :src="activeTotural.url"
           title="YouTube video player"
           frameborder="0"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
           allowfullscreen
+          v-if="activeTotural.url"
         ></iframe>
         <div v-html="activeTotural.des"></div>
       </div>
-      <div class="chapter_control">
+      <p v-else>無近一步的細節教學內容</p>
+
+      <div class="chapter_control" v-if="toturalArr.length > 0">
         <button
           v-for="(toturl, i) in toturalArr"
           :key="toturl.id"
@@ -36,6 +38,7 @@ export default {
     const store = useStore();
     const toturalArr = ref([]);
     const activeTotural = ref({});
+
     if (props.data.sheetid) {
       Object.keys(props.data).forEach((key, i) => {
         const desRegEx = /^des[1-3]$/;
@@ -52,7 +55,6 @@ export default {
     }
 
     function setActiveTotural(value) {
-      console.log(value);
       activeTotural.value = value;
     }
 
@@ -93,6 +95,12 @@ export default {
         height: 40vw;
         margin-bottom: 2rem;
       }
+    }
+    p {
+      margin-top: 10px;
+      width: 100%;
+      text-align: left;
+      font-size: var(--f-mi);
     }
     .chapter_control {
       width: 20%;

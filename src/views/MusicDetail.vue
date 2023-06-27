@@ -30,6 +30,7 @@
         <TabSheet
           :data="data"
           :purchasedState="purchasedState"
+          :authInfo="menubarAuthInfo"
           v-if="activeTab === 'sheet'"
         />
 
@@ -61,16 +62,6 @@ export default {
     const chapterOpen = ref(false);
     const store = useStore();
     const purchasedSheets = ref([]);
-
-    // localStorage.setItem(
-    //   "member",
-    //   JSON.stringify({
-    //     mbrID: "fe99bf13-8781-4793-b5ec-af89b4ec050f",
-    //     token:
-    //       "eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6Imhhb2thaUBpbnRlbGxhLmNvIiwibWVtYmVySWQiOiJmZTk5YmYxMy04NzgxLTQ3OTMtYjVlYy1hZjg5YjRlYzA1MGYiLCJleHAiOjE2ODczMzQyMzQsImlzcyI6ImZpbmdlcnRhYkFkbWluIn0.bD0Sy8Qo1a4DoYRp2RDVq_LuduMKm0nHvpgiiKbCGI0",
-    //   })
-    // );
-
     const menubarAuthInfo = computed(() => {
       return store.getters["member/menubarAuthInfo"];
     });

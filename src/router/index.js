@@ -5,6 +5,7 @@ import {
 } from "vue-router";
 
 import store from "../store/index";
+
 const router = createRouter({
   history: createWebHashHistory(),
   routes: [

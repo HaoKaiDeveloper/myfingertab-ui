@@ -9,7 +9,6 @@
       />
     </div>
     <MusicDetail
-      v-if="showMusicDetail"
       :show="showMusicDetail"
       :data="musicDetail"
       @close-music-detail="openMusicDetail"

@@ -1,4 +1,5 @@
 import axios from "axios";
+import { authFetch, basicFetch } from "../api/api";
 
 const localcart = localStorage.getItem("cart")
   ? JSON.parse(localStorage.getItem("cart"))
@@ -52,14 +53,13 @@ export default {
         });
       });
       try {
-        const res = await axios.post(
-          `https://s.intella.co/myfingertab/api/Order/purchase`,
+        const res = await authFetch.post(
+          `/Order/purchase`,
           {
             mbrID,
             orderItems: arr,
           },
           {
-            withCredentials: true,
             headers: {
               Authorization: `Bearer ${token}`,
             },
@@ -75,23 +75,16 @@ export default {
       const { mbrID, token } = payload;
 
       try {
-        const res = await axios.get(
-          `https://s.intella.co/myfingertab/api/Order/purchased-sheets?mbrId=${mbrID}`,
+        const res = await authFetch.get(
+          `/Order/purchased-sheets?mbrId=${mbrID}`,
           {
-            withCredentials: true,
             headers: {
               Authorization: `Bearer ${token}`,
             },
           }
         );
-        // data:{
-        //   error: '使用非法Token或Token已過期，請重新登入'
-        // }
-        const { data } = res;
-        if (data.error) {
-          throw new Error("");
-        }
-        return data;
+
+        return res.data;
       } catch (err) {
         console.log(err);
       }
@@ -99,15 +92,11 @@ export default {
     async getPurchaseHistory(state, payload) {
       const { mbrID, token } = payload;
       try {
-        const res = await axios.get(
-          `https://s.intella.co/myfingertab/api/Order/orders?mbrId=${mbrID}`,
-          {
-            withCredentials: true,
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        const res = await authFetch.get(`/Order/orders?mbrId=${mbrID}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
         if (res.status == 200) {
           return res.data;
         } else {
@@ -120,10 +109,9 @@ export default {
     async getOrderDetail(state, payload) {
       const { transNo, mbrID, token } = payload;
       try {
-        const res = await axios.get(
-          `https://s.intella.co/myfingertab/api/Order/orders/${transNo}/details?memberId=${mbrID}`,
+        const res = await authFetch.get(
+          `/Order/orders/${transNo}/details?memberId=${mbrID}`,
           {
-            withCredentials: true,
             headers: {
               Authorization: `Bearer ${token}`,
             },
