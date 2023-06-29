@@ -5,7 +5,7 @@
     <router-view class="views"></router-view>
     <AddItemMsg />
     <Footer />
-    <!-- <TokenExpired v-if="tokenExpiredState" /> -->
+    <TokenExpired v-if="tokenExpiredState" />
   </div>
 </template>
 

@@ -59,7 +59,7 @@ const store = createStore({
       const { sheetId, mbrID, token } = payload;
       try {
         const res = await authFetch.get(
-          `/Order/pdf?mbrId=${mbrID}&sheetid=${sheetId}`,
+          `/Order/pdf?mbrId=${mbrID}&sheetId=${sheetId}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,

@@ -12,8 +12,8 @@
       </div>
 
       <a
-        v-if="purchasedState || (authInfo.token && data.saleprice === 0)"
         class="downloandBtn"
+        v-if="purchasedState || (authInfo.token && data.saleprice === 0)"
         @click="downloadSheet(data)"
         >下載檔案</a
       >
