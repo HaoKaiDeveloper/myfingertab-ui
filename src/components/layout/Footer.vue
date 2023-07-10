@@ -21,16 +21,16 @@
 
     <div class="follow">
       <h3>追蹤我們</h3>
-      <a href="https://www.facebook.com/">
+      <a href=" https://www.facebook.com/ifinger2023" target="_blank">
         <v-icon icon="mdi-facebook" />
       </a>
-      <a href="https://www.facebook.com/">
+      <a href=" https://www.instagram.com/ifinger_forever/" target="_blank">
         <v-icon icon="mdi-instagram" />
       </a>
-      <a href="https://www.facebook.com/">
-        <v-icon icon="mdi-youtube" />
-      </a>
-      <a href="https://www.facebook.com/">
+      <a
+        href=" https://line.me/R/ti/p/@570seumw?from=page&accountId=570seumw"
+        target="_blank"
+      >
         <img :src="lineIcon" alt="line" />
       </a>
     </div>
@@ -153,7 +153,8 @@ p {
     margin: 0 0.4em;
   }
   img {
-    margin-bottom: -7px;
+    margin-bottom: -8px;
+    margin-left: 10px;
     width: 30px;
     object-fit: cover;
   }

@@ -33,12 +33,12 @@
 
 <script>
 import { useStore } from "vuex";
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import { ImageSwiper, NewsListSwiper } from "../components/homepage/index.js";
 import MusicCard from "../components/UI/MusicCard.vue";
 import MusicDetailPopup from "./MusicDetail.vue";
 import { useRoute, useRouter } from "vue-router";
-import { all } from "axios";
+
 export default {
   components: {
     ImageSwiper,
@@ -50,6 +50,7 @@ export default {
     const route = useRoute();
     const router = useRouter();
     const store = useStore();
+    const initSwiperImgs = ref([]);
     const swiperImgs = ref([]);
     const newsList = ref([]);
     const musicList = ref([]);
@@ -69,15 +70,10 @@ export default {
           }),
         ]);
 
-        swiperImgs.value = carousel;
+        initSwiperImgs.value = carousel;
         newsList.value = allNews;
         musicList.value = data.SheetInfo;
-
-        if (window.innerWidth <= 700) {
-          swiperImgs.value = carousel.map((data) => {
-            return { ...data, img: data.smallimg };
-          });
-        }
+        setSwiperImg();
 
         if (Object.keys(route.query).length > 0) {
           const token = route.fullPath.split("code=")[1].split("&")[0];
@@ -126,7 +122,32 @@ export default {
       showMusicDetail.value = true;
     }
 
+    function setSwiperImg() {
+      if (window.innerWidth <= 700) {
+        swiperImgs.value = initSwiperImgs.value.map((item) => {
+          return { ...item, img: item.smallimg };
+        });
+      } else {
+        swiperImgs.value = initSwiperImgs.value.map((item) => {
+          return { ...item, img: item.img };
+        });
+      }
+
+      window.addEventListener("resize", () => {
+        if (window.innerWidth <= 700) {
+          swiperImgs.value = initSwiperImgs.value.map((item) => {
+            return { ...item, img: item.smallimg };
+          });
+        } else {
+          swiperImgs.value = initSwiperImgs.value.map((item) => {
+            return { ...item, img: item.img };
+          });
+        }
+      });
+    }
+
     return {
+      initSwiperImgs,
       swiperImgs,
       newsList,
       musicList,
