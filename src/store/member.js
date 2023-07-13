@@ -110,8 +110,6 @@ export default {
             Authorization: `Bearer ${token}`,
           },
         });
-        console.log(res);
-
         const { data } = res;
         if (data.error) {
           return;

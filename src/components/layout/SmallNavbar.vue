@@ -85,7 +85,7 @@ export default {
     async function checkMemberLogin() {
       // 確認是否已經登入
       if (menubarAuthInfo.value.mbrID) {
-        router.replace("/member");
+        router.replace("/member/info");
       } else {
         router.replace("/login");
       }

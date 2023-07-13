@@ -4,7 +4,8 @@
       <div v-show="show">
         <h1>請用手機掃描Qr code 付款</h1>
         <QrcodeVue :value="url" :size="200" level="H" />
-        <button type="button" @click="closePopup">關閉</button>
+        <button type="button" @click="closePopup">取消付款</button>
+        <button type="button" @click="check">付款完成</button>
       </div>
     </transition>
   </section>
@@ -13,11 +14,20 @@
 <script>
 import QrcodeVue from "qrcode.vue";
 import { ref, watch } from "vue";
+import { useRouter } from "vue-router";
+import { useStore } from "vuex";
 export default {
   props: ["url"],
   components: { QrcodeVue },
   setup(props, context) {
     const show = ref(false);
+    const router = useRouter();
+    const store = useStore();
+
+    function check() {
+      store.commit("order/clearCart");
+      router.push("/member/mysheet");
+    }
 
     function closePopup() {
       show.value = false;
@@ -25,6 +35,7 @@ export default {
         context.emit("close-popup");
       }, 250);
     }
+
     watch(
       () => props.url,
       () => {
@@ -34,7 +45,7 @@ export default {
       }
     );
 
-    return { closePopup, show };
+    return { closePopup, check, show };
   },
 };
 </script>
@@ -58,7 +69,7 @@ div {
   max-width: 350px;
   min-width: 250px;
   height: 80%;
-  max-height: 350px;
+  max-height: 400px;
   background-color: var(--grey-1);
   display: flex;
   flex-direction: column;

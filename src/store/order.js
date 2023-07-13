@@ -39,6 +39,10 @@ export default {
       );
       localStorage.setItem("cart", JSON.stringify(state.cartItems));
     },
+    clearCart(state) {
+      state.cartItems = [];
+      localStorage.setItem("cart", JSON.stringify([]));
+    },
   },
   actions: {
     async createNewOrder(state, payload) {

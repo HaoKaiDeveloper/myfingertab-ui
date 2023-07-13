@@ -4,76 +4,55 @@
       <div class="tab_btns">
         <button
           type="button"
-          @click="changeTabValue('Tab_InfoForm')"
-          :class="{ active: activeTab === 'Tab_InfoForm' }"
+          @click="changeTabValue('info')"
+          :class="{ active: activeTab === 'info' }"
         >
           基本資料
         </button>
         <button
           type="button"
-          @click="changeTabValue('Tab_MySheetMusic')"
-          :class="{ active: activeTab === 'Tab_MySheetMusic' }"
+          @click="changeTabValue('mysheet')"
+          :class="{ active: activeTab === 'mysheet' }"
         >
           我的樂譜
         </button>
         <button
           type="button"
-          @click="changeTabValue('Tab_ShoppingSheet')"
-          :class="{ active: activeTab === 'Tab_ShoppingSheet' }"
+          @click="changeTabValue('shoppingsheet')"
+          :class="{ active: activeTab === 'shoppingsheet' }"
         >
           購買紀錄
         </button>
       </div>
-      <component
-        :is="activeTab"
-        :authInfo="menubarAuthInfo"
-        :basicInfo="basicInfo"
-      ></component>
+      <router-view></router-view>
     </div>
   </section>
 </template>
 
 <script>
-import { ref, computed } from "vue";
-import {
-  Tab_InfoForm,
-  Tab_MySheetMusic,
-  Tab_ShoppingSheet,
-} from "../../components/MemberInfo/index.js";
-import { useStore } from "vuex";
+import { ref } from "vue";
+import { useRouter, useRoute } from "vue-router";
 export default {
-  components: { Tab_InfoForm, Tab_MySheetMusic, Tab_ShoppingSheet },
   setup() {
-    const store = useStore();
-    const activeTab = ref("Tab_InfoForm");
-    const menubarAuthInfo = computed(() => {
-      return store.getters["member/menubarAuthInfo"];
-    });
-    const basicInfo = ref({});
+    const router = useRouter();
+    const route = useRoute();
+    const activeTab = ref("");
 
     function changeTabValue(value) {
       activeTab.value = value;
-      if (value === "Tab_InfoForm") {
-        getMemberInfo();
-      }
+      router.push(`/member/${value}`);
     }
-
-    getMemberInfo();
-    async function getMemberInfo() {
-      try {
-        const data = await store.dispatch(
-          "member/getMemberInfo",
-          menubarAuthInfo.value
-        );
-        basicInfo.value = data;
-      } catch (err) {
-        console.log(err);
+    init();
+    function init() {
+      const path = route.path.split("/")[2];
+      if (path === "info" || path === "mysheet" || path === "shoppingsheet") {
+        activeTab.value = path;
+      } else {
+        router.replace("/");
       }
     }
 
     return {
-      menubarAuthInfo,
-      basicInfo,
       activeTab,
       changeTabValue,
     };

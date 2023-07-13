@@ -69,7 +69,7 @@ export default {
     async function checkMemberLogin() {
       // 確認是否已經登入
       if (menubarAuthInfo.value.mbrID) {
-        router.replace("/member");
+        router.replace("/member/info");
       } else {
         router.replace("/login");
       }
@@ -98,7 +98,6 @@ export default {
 <style lang="scss" scoped>
 #navbar {
   width: 100%;
-  max-width: 2000px;
   height: 80px;
   display: flex;
   align-items: center;

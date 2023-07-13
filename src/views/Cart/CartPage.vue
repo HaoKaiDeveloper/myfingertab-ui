@@ -4,6 +4,7 @@
     <div class="cart_items" v-if="cartItems.length > 0">
       <CartItem v-for="item in cartItems" :key="item.sheetId" :item="item" />
 
+      <p class="sameSheetMsg">{{ sameSheetMsg }}</p>
       <p class="totalPrice">總計 : {{ totalPrice }}</p>
 
       <button
@@ -14,6 +15,7 @@
       >
         結帳
       </button>
+
       <router-link to="/login" class="login_btn" v-else>
         <button type="button">登入後結帳</button>
       </router-link>
@@ -34,6 +36,7 @@ export default {
     const store = useStore();
     const uaparser = new UAParser();
     const qrcodeUrl = ref("");
+    const sameSheetMsg = ref("");
     const menubarAuthInfo = computed(() => {
       return store.getters["member/menubarAuthInfo"];
     });
@@ -55,6 +58,38 @@ export default {
     });
 
     async function createNewOrder() {
+      let sameSheet = "";
+      try {
+        const mySheets = await store.dispatch("order/getPurchasedSheets", {
+          ...menubarAuthInfo.value,
+        });
+        if (mySheets && mySheets.length > 0) {
+          const tempArr = [...cartItems.value];
+          const tempObj = {};
+          mySheets.forEach((sheet) => {
+            tempArr.push({ ...sheet, sheetid: sheet.sheetId });
+          });
+          tempArr.forEach((sheet) => {
+            if (tempObj[sheet.sheetid]) {
+              tempObj[sheet.sheetid]++;
+            } else {
+              tempObj[sheet.sheetid] = 1;
+            }
+          });
+          for (let key in tempObj) {
+            if (tempObj[key] >= 2) {
+              sameSheetMsg.value = "您已購買的樂譜已有相同樂譜";
+              setTimeout(() => {
+                sameSheetMsg.value = "";
+              }, 2000);
+              return;
+            }
+          }
+        }
+      } catch (err) {
+        console.log(err);
+      }
+
       try {
         const res = await store.dispatch("order/createNewOrder", {
           ...menubarAuthInfo.value,
@@ -86,6 +121,7 @@ export default {
       menubarAuthInfo,
       createNewOrder,
       qrcodeUrl,
+      sameSheetMsg,
       closePopup,
     };
   },
@@ -106,6 +142,12 @@ section {
   @media screen and (max-width: 1000px) {
     padding: 0 1em;
   }
+}
+
+.sameSheetMsg {
+  font-size: var(--f-mi);
+  height: 20px;
+  text-align: center;
 }
 
 .title {

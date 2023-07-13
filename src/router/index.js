@@ -46,9 +46,29 @@ const router = createRouter({
     },
     {
       name: "member",
-      path: "/member",
+      path: "/member/:path",
       component: () => import("../views/MemberPages/MemberInfo.vue"),
       meta: { requiresAuth: true },
+      children: [
+        {
+          name: "info",
+          path: "/member/info",
+          component: () =>
+            import("../views/MemberPages/InfoPage/Tab_InfoForm.vue"),
+        },
+        {
+          name: "mysheet",
+          path: "/member/mysheet",
+          component: () =>
+            import("../views/MemberPages/InfoPage/Tab_MySheetMusic.vue"),
+        },
+        {
+          name: "shoppingsheet",
+          path: "/member/shoppingsheet",
+          component: () =>
+            import("../views/MemberPages/InfoPage/Tab_ShoppingSheet.vue"),
+        },
+      ],
     },
     {
       name: "about",
@@ -78,6 +98,10 @@ const router = createRouter({
       meta: { requiresAuth: true },
     },
     {
+      path: "/member/:pathMatch(.*)*",
+      redirect: "/",
+    },
+    {
       path: "/:pathMatch(.*)",
       redirect: "/",
     },
@@ -103,7 +127,7 @@ router.beforeEach((to, from, next) => {
     (to.fullPath === "/login" || to.fullPath === "/setPassword") &&
     mbrID
   ) {
-    next("/member");
+    next("/member/info");
   } else {
     store
       .dispatch("member/getWishList")
